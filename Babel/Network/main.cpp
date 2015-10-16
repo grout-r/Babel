@@ -32,9 +32,10 @@ void		startServer()
 	ClientSocket = net->MyAcceptFunc(ListenSocket);
 	net->sendMessage("salut", ClientSocket);
 	std::cout << net->rcvMessage(ClientSocket) << std::endl;
+	system("pause");
 }
 
 int			main()
 {
-	startServer();
+	startClient();
 }
