@@ -1,12 +1,11 @@
 #ifdef __linux__
 
 #include "UThread.h"
+#include "..\Babel\UThread.h"
 
-CUThread::CUThread(IMutex *mutex)
-	: _mutex(mutex)
+CUThread::CUThread(SafeQueue * safeStock)
 {
 }
-
 
 CUThread::~CUThread()
 {

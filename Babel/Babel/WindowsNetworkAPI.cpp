@@ -16,7 +16,7 @@ bool WindowsNetworkAPI::initNetwork()
 	WSADATA wsaData;
 	int result;
 	result = WSAStartup(MAKEWORD(2, 2), &wsaData);
-	if (result != 0) 
+	if (result != 0)
 	{
 		printf("WSAStartup failed: %d\n", result);
 		return 1;

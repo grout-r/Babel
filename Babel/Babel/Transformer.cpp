@@ -10,7 +10,7 @@ IMutex * Transformer::MutexHandler()
 	return nullptr;
 }
 
-IThread * Transformer::ThreadHandler(SafeQueue *mutex)
+IThread * Transformer::ThreadHandler(SafeQueue &mutex)
 {
 #ifdef __linux__
 	return new CUThread(mutex);

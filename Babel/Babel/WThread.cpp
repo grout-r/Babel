@@ -17,7 +17,7 @@ bool CWThread::InitThread(void routine(SafeQueue &params))
 		NULL,									// default security attributes
 		0,										// use default stack size  
 		(LPTHREAD_START_ROUTINE)routine,		// thread function name
-		_mutex,									// argument to thread function 
+		&_safeStock,									// argument to thread function 
 		CREATE_SUSPENDED,						// use default creation flags 
 		0										// returns the thread identifier 
 		)) == NULL ? false : true);	
