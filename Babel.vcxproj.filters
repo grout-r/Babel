@@ -1,10 +1,37 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClCompile Include="C:\Users\Arthur\Documents\GitHubVisualStudio\Babel\src\main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="C:\Users\Arthur\Documents\GitHubVisualStudio\Babel\Babel_automoc.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\GUI.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Transformer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\WindowsNetworkAPI.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\WThread.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\UMutex.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SafeQueue.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ScopedLock.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="WMutex.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="UThread.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -15,5 +42,49 @@
     <Filter Include="Source Files">
       <UniqueIdentifier>{7222765D-6E10-3631-BF45-090A233F6F00}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Include">
+      <UniqueIdentifier>{ed5872c8-e1f1-41fe-b991-6167eebc46d7}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="GUI.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="IMutex.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="IThread.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="NetworkAPI.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="SafeQueue.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Transformer.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="UMutex.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="UThread.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="WindowsNetworkAPI.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="WindowsNetworkDefines.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="WMutex.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="WThread.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="ScopedLock.h">
+      <Filter>Include</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

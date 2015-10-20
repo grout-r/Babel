@@ -386,11 +386,35 @@ if %errorlevel% neq 0 goto :VCEnd</Command>
   <ItemGroup>
     <ClCompile Include="C:\Users\Arthur\Documents\GitHubVisualStudio\Babel\src\main.cpp" />
     <ClCompile Include="C:\Users\Arthur\Documents\GitHubVisualStudio\Babel\Babel_automoc.cpp" />
+    <ClCompile Include="SafeQueue.cpp" />
+    <ClCompile Include="ScopedLock.cpp" />
+    <ClCompile Include="src\GUI.cpp" />
+    <ClCompile Include="src\Transformer.cpp" />
+    <ClCompile Include="src\UMutex.cpp" />
+    <ClCompile Include="src\WindowsNetworkAPI.cpp" />
+    <ClCompile Include="src\WThread.cpp" />
+    <ClCompile Include="UThread.cpp" />
+    <ClCompile Include="WMutex.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="C:/Users/Arthur/Documents/GitHubVisualStudio/Babel/ZERO_CHECK.vcxproj">
       <Project>7C03B6EE-D2AA-3F2B-B9E4-292E5B73103F</Project>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="GUI.h" />
+    <ClInclude Include="IMutex.h" />
+    <ClInclude Include="IThread.h" />
+    <ClInclude Include="NetworkAPI.h" />
+    <ClInclude Include="SafeQueue.h" />
+    <ClInclude Include="ScopedLock.h" />
+    <ClInclude Include="Transformer.h" />
+    <ClInclude Include="UMutex.h" />
+    <ClInclude Include="UThread.h" />
+    <ClInclude Include="WindowsNetworkAPI.h" />
+    <ClInclude Include="WindowsNetworkDefines.h" />
+    <ClInclude Include="WMutex.h" />
+    <ClInclude Include="WThread.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
