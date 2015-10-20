@@ -1,0 +1,3 @@
+C:/Users/Arthur/Documents/GitHubVisualStudio/Babel/CMakeFiles/Babel.dir
+C:/Users/Arthur/Documents/GitHubVisualStudio/Babel/CMakeFiles/ALL_BUILD.dir
+C:/Users/Arthur/Documents/GitHubVisualStudio/Babel/CMakeFiles/ZERO_CHECK.dir
