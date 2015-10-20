@@ -120,6 +120,7 @@
   <ItemGroup>
     <ClInclude Include="IMutex.h" />
     <ClInclude Include="IThread.h" />
+    <ClInclude Include="ScopeLock.h" />
     <ClInclude Include="Transformer.h" />
     <ClInclude Include="UMutex.h" />
     <ClInclude Include="UThread.h" />
