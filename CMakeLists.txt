@@ -13,6 +13,7 @@ find_package(Qt5Core)
 
 file(GLOB SOURCES src/*.cpp)
 
+include_directories(includes)
 
 # Tell CMake to create the helloworld executable
 add_executable(Babel WIN32 ${SOURCES})

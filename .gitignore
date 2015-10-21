@@ -220,3 +220,4 @@ CMakeFiles/
 *.vcxproj.filters
 *.sdf
 CMakeCache.txt
+*.cmake
