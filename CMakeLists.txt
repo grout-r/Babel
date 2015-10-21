@@ -11,10 +11,11 @@ set(CMAKE_AUTOMOC ON)
 find_package(Qt5Widgets)
 find_package(Qt5Core)
 
-#file(GLOB SOURCES src/*.cpp)
+file(GLOB SOURCES src/*.cpp)
+
 
 # Tell CMake to create the helloworld executable
-add_executable(Babel WIN32 src/main.cpp)
+add_executable(Babel WIN32 ${SOURCES})
 
 
 # Use the Widgets module from Qt 5.

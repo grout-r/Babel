@@ -1,1 +1,0 @@
-set(AM_OLD_COMPILE_SETTINGS "QT_CORE_LIB;QT_GUI_LIB;QT_NO_DEBUG;QT_WIDGETS_LIB ~~~ C:/Users/Arthur/Documents/GitHubVisualStudio/Babel;C:/Qt/5.5/msvc2013/include;C:/Qt/5.5/msvc2013/include/QtWidgets;C:/Qt/5.5/msvc2013/include/QtGui;C:/Qt/5.5/msvc2013/include/QtCore;C:/Qt/5.5/msvc2013/./mkspecs/win32-msvc2013 ~~~  ~~~ FALSE ~~~ ")
