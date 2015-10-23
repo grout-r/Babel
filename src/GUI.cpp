@@ -3,28 +3,39 @@
 #include "Windows.h"
 #include <iostream>
 
-GUI::GUI(SafeQueue &queue)
-	: _queue(queue)
+GUI::GUI()
 {
-	std::cout << "arthurrr couillerre" << std::endl;
-	Start();
+	_mainLayout = new QGridLayout;
+	_ipAddress = new QLineEdit;
+	_port = new QLineEdit;
+	_connectServer = new QPushButton("Connect");
+
+	_mainLayout->addWidget(new QLabel("Server IP :"), 0, 0);
+	_mainLayout->addWidget(_ipAddress, 0, 1);
+	_mainLayout->addWidget(new QLabel("Server port :"), 0, 2);
+	_mainLayout->addWidget(_port, 0, 3);
+	_mainLayout->addWidget(_connectServer, 0, 4);
+
+	this->setLayout(_mainLayout);
 }
 
 GUI::~GUI()
 {
+
 }
 
-void GUI::Start()
+QPushButton			*GUI::getConnectServerButton()
 {
-	int i = 0;
-	std::string str;
-	while (1)
-	{/*
-		std::cin >> str;
-		str += '\n';*/
-	std::cout << "before fill" << std::endl;
-		_queue.FillInList("arthur la gentri\n");
-//		str += rand() % 128;
-		Sleep(500);
-	}
+	return (_connectServer);
 }
+
+std::string			GUI::getIp()
+{
+	return (_ipAddress->displayText().toStdString());
+}
+
+std::string			GUI::getPort()
+{
+	return (_port->displayText().toStdString());
+}
+

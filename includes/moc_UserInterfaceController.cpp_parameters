@@ -1,0 +1,7 @@
+-IC:/Users/roman/Documents/GitHubVisualStudio/Babel/includes
+-IC:/Users/roman/Documents/GitHubVisualStudio/Babel
+-IC:/Users/roman/Documents/GitHubVisualStudio/Babel
+-DWIN32
+-o
+C:/Users/roman/Documents/GitHubVisualStudio/Babel/includes/moc_UserInterfaceController.cpp
+C:/Users/roman/Documents/GitHubVisualStudio/Babel/includes/UserInterfaceController.h
