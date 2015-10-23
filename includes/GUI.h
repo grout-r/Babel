@@ -1,19 +1,34 @@
 #ifndef GUI_H_
 # define GUI_H_
 
-# include "SafeQueue.h"
+# include <QWidget>
+# include <QApplication.h>
+# include <QLineEdit>
+# include <QGridLayout>
+# include <QPushButton>
+# include <QLabel>
+# include <QObject>
+# include <string>
 
-class GUI
+class GUI : public QWidget
 {
 public:
-	GUI(SafeQueue& queue);
+	GUI();
 	~GUI();
 
 private:
-	SafeQueue&	_queue;
+
+
+private:
+	QGridLayout		*_mainLayout;
+	QLineEdit		*_ipAddress;
+	QLineEdit		*_port;
+	QPushButton		*_connectServer;
 
 public:
-	void	Start();
+	QPushButton		*getConnectServerButton();
+	std::string		getIp();
+	std::string		getPort();
 };
 
 #endif

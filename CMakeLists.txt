@@ -15,8 +15,10 @@ file(GLOB SOURCES src/*.cpp)
 
 include_directories(includes)
 
+
+qt5_wrap_cpp(moc_sources includes/UserInterfaceController.h)
 # Tell CMake to create the helloworld executable
-add_executable(Babel WIN32 ${SOURCES})
+add_executable(Babel WIN32 ${SOURCES} ${moc_sources})
 
 
 # Use the Widgets module from Qt 5.
