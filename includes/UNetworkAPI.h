@@ -1,21 +1,19 @@
-#ifndef WNETWORKAPI_H_
-# define WNETWORKAPI_H_
+#ifndef UNETWORKAPI_H_
+# define UNETWORKAPI_H_
 
-#ifdef _WIN32
+# ifdef __linux__
 
-#include "WindowsNetworkDefines.h"
-#include "NetworkAPI.h"
-#pragma comment(lib, "ws2_32.lib")
+# include "NetworkAPI.h"
 
-class							WindowsNetworkAPI : public Network
+class							UNetworkAPI : public Network
 {
 
 public:
-	WindowsNetworkAPI();
-	~WindowsNetworkAPI();
+	UNetworkAPI();
+	~UNetworkAPI();
 
 	bool						initNetwork();
-	MyConnectionData*			getAddr(const char * ip, const char * port, int family, int socktype, int protocol, int flags);
+	MyConnectionData*			getAddr(char * ip, char * port, int family, int socktype, int protocol, int flags);
 	MySocket					MySocketFunc(MyConnectionData*);
 	bool						MyConnectFunc(MySocket, MyConnectionData*);
 	bool						MyBindFunc(MySocket, MyConnectionData*);
@@ -27,6 +25,6 @@ public:
 	bool						closeConnection();
 };
 
-#endif
+# endif
 
 #endif
