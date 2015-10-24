@@ -1,11 +1,8 @@
 #include "WindowsNetworkAPI.h"
 
-
-
 WindowsNetworkAPI::WindowsNetworkAPI()
 {
 }
-
 
 WindowsNetworkAPI::~WindowsNetworkAPI()
 {
@@ -19,17 +16,22 @@ bool WindowsNetworkAPI::initNetwork()
 	if (result != 0)
 	{
 		printf("WSAStartup failed: %d\n", result);
-		return 1;
+		return true;
 	}
 	return false;
 }
 
-MyConnectionData *WindowsNetworkAPI::getAddr(char * ip, char * port, int mode)
+MyConnectionData *WindowsNetworkAPI::getAddr(const char * ip, const char * port, int family, int socktype, int protocol, int flags)
 {
 	struct addrinfo *addr = NULL, hints;
 	int result;
 	ZeroMemory(&hints, sizeof(hints));
+	hints.ai_flags = flags;
+	hints.ai_family = family;
+	hints.ai_socktype = socktype;
+	hints.ai_protocol = protocol;
 
+/*
 	if (mode == MODE_CLIENT)
 	{
 		hints.ai_family = AF_UNSPEC;
@@ -42,7 +44,7 @@ MyConnectionData *WindowsNetworkAPI::getAddr(char * ip, char * port, int mode)
 		hints.ai_socktype = SOCK_STREAM;
 		hints.ai_protocol = IPPROTO_TCP;
 		hints.ai_flags = AI_PASSIVE;
-	}
+	}*/
 	result = getaddrinfo(ip, port, &hints, &addr);
 	if (result != 0) {
 		printf("getaddrinfo failed: %d\n", result);
@@ -119,6 +121,19 @@ bool WindowsNetworkAPI::sendMessage(const char * msg, MySocket socket)
 	}
 
 	return false;
+}
+
+void		WindowsNetworkAPI::MySelectFunc(MySocket socket)
+{
+	fd_set	rdfs;
+
+	FD_ZERO(&rdfs);
+	FD_SET(socket, &rdfs);
+	if (select(socket + 1, &rdfs, NULL, NULL, NULL) == -1)
+	{
+		perror("select()");
+		exit(0);
+	}
 }
 
 std::string WindowsNetworkAPI::rcvMessage(MySocket socket)
