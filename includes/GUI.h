@@ -9,6 +9,9 @@
 # include <QLabel>
 # include <QObject>
 # include <string>
+# include <QScrollArea>
+# include <QString>
+# include <QVBoxLayout>
 
 class GUI : public QWidget
 {
@@ -24,11 +27,16 @@ private:
 	QLineEdit		*_ipAddress;
 	QLineEdit		*_port;
 	QPushButton		*_connectServer;
+	QScrollArea		*_contactListArea;
+	QVBoxLayout		*_contactListLayout;
 
 public:
 	QPushButton		*getConnectServerButton();
 	std::string		getIp();
 	std::string		getPort();
+
+public:
+	QPushButton*	insertNewContact(std::string);
 };
 
 #endif

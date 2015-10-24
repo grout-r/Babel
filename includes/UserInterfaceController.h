@@ -16,13 +16,14 @@ public:
 	UserInterfaceController();
 	~UserInterfaceController();
 	void						run();
+	void						insertNewContact(std::string, int);
 
 private:
 	void					connectSlots();
 
 public slots:
 	void					connectServerSlot();
-
+	void					call(int);
 
 private:
 	QApplication		*_app;
