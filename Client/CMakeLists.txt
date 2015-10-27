@@ -13,13 +13,12 @@ find_package(Qt5Core)
 
 file(GLOB SOURCES src/*.cpp)
 
-include_directories(includes)
+include_directories(Client/includes)
 
 
-qt5_wrap_cpp(moc_sources includes/UserInterfaceController.h)
+qt5_wrap_cpp(moc_sources Client/includes/UserInterfaceController.h)
 # Tell CMake to create the helloworld executable
 add_executable(BabelClient WIN32 ${SOURCES} ${moc_sources})
-
 
 # Use the Widgets module from Qt 5.
 target_link_libraries(BabelClient Qt5::Widgets)

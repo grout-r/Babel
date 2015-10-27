@@ -7,6 +7,6 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 file(GLOB SOURCES src/*.cpp)
 
-include_directories(includes)
+include_directories(Server/includes)
 
 add_executable(BabelServer WIN32 ${SOURCES} ${moc_sources})

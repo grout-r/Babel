@@ -14,7 +14,7 @@ public:
 	virtual bool						MyListenFunc(MySocket) = 0;
 	virtual MySocket					MyAcceptFunc(MySocket) = 0;
 	virtual bool						sendMessage(const char *msg, MySocket) = 0;
-	virtual void						MySelectFunc(MySocket socket) = 0;
+	virtual void						MySelectFunc(MySocket socket, fd_set &fdSet) = 0;
 	virtual std::string					rcvMessage(MySocket) = 0;
 	virtual bool						closeConnection() = 0;
 };
