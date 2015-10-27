@@ -112,36 +112,16 @@ std::string UNetworkAPI::rcvMessage(MySocket socket)
 	return std::string(tmp);
 }
 
-void		UNetworkAPI::MySelectFunc(MySocket socket, fd_set &fdSet)
+void		UNetworkAPI::MySelectFunc(MySocket socket, fd_set &readSet)
 {
-	FD_ZERO(&fdSet);
-	FD_SET(STDIN_FILENO, &fdSet);
-	FD_SET(socket, &fdSet);
-	if (select(socket + 1, &fdSet, NULL, NULL, NULL) == -1)
+	FD_ZERO(&readSet);
+	FD_SET(STDIN_FILENO, &readSet);
+	FD_SET(socket, &readSet);
+	if (select(socket + 1, &readSet, NULL, NULL, NULL) == -1)
 	{
 		perror("select()");
 		exit(0);
 	}
-}
-
-static int		select_fd(t_data *data, fd_set fd_read)
-{
-	int			i;
-	t_list		*tmp;
-
-	i = 2;
-	while (++i <= data->max_fd + 1)
-	{
-		if (FD_ISSET(i, &fd_read))
-		{
-			tmp = get_elem(data->root, i);
-			if (tmp != data->root && tmp != data->root->next)
-				tmp->read_f(data, tmp);
-			else
-				server_read(data, i);
-	}
-	}
-	return (0);
 }
 
 bool UNetworkAPI::closeConnection()
