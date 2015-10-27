@@ -2,6 +2,9 @@
 
 Core::Core()
 {
+	_GUImap.emplace(CONNECT, &Core::connectToServer);
+	_GUImap.emplace(NICK, &Core::changeNick);
+	_GUImap.emplace(CALL, &Core::outcomeCall);
 }
 
 Core::~Core()
@@ -11,21 +14,61 @@ Core::~Core()
 
 void Core::start()
 {
-	uictrl = new UserInterfaceController;
+	_uictrl = new UserInterfaceController;
 
 	QTimer *timer = new QTimer;
-	connect(timer, &QTimer::timeout, 
+	connect(timer, &QTimer::timeout,
 		[=]() { this->events(); });
 	timer->start(0);
-	uictrl->insertNewContact("Bobby", 1217);
-	uictrl->insertNewContact("Bobby", 1218);
-	uictrl->insertNewContact("Bobby", 1219);
-	uictrl->insertNewContact("Bobby", 1220);
-	uictrl->run();
+	
+	_uictrl->insertNewContact("Bobby", 1217);
+	_uictrl->insertNewContact("Bobbu", 1219);
+	_uictrl->insertNewContact("Bobbette", 1220);
+	_uictrl->insertNewContact("Bobbette", 1220);
+	_uictrl->insertNewContact("Bobbette", 1220);
+	_uictrl->insertNewContact("Bobbette", 1220);
+	_uictrl->insertNewContact("Bobbette", 1220);
+	_uictrl->insertNewContact("Bobbette", 1220);
+	_uictrl->insertNewContact("Bobbette", 1220);
+	_uictrl->insertNewContact("Bobbette", 1220);
+	_uictrl->insertNewContact("Bobbette", 1220);
+	_uictrl->insertNewContact("Bobbo", 1221);
+	_uictrl->callRequest("Jean jacques");
+
+	_uictrl->run();
 }
 
 /* ACCESS TO THE QT LOOP, THIS CODE WILL BE EXECUTED AT ALL ITERATION OF THE PROG*/
 void			Core::events()
 {
+	treatGuiEvents();
+}
 
+void Core::treatGuiEvents()
+{
+	std::queue<GUIEvent>	*queue = _uictrl->getEvents();
+	GUIEvent				current;
+
+	while (!queue->empty())
+	{
+		current = queue->front();
+		queue->pop();
+		(this->*_GUImap[current.command])(current);
+	}
+}
+
+void Core::outcomeCall(GUIEvent event)
+{
+	std::cout << "call" << std::endl;
+}
+
+void Core::changeNick(GUIEvent event)
+{
+	std::cout << "nick" << std::endl;
+}
+
+void Core::connectToServer(GUIEvent event)
+{
+	if (slink.connect(event.ip, event.port) == false)
+		_uictrl->connectionError();
 }

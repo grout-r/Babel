@@ -68,8 +68,9 @@ bool WindowsNetworkAPI::MyConnectFunc(MySocket socket, MyConnectionData *addrInf
 	if (iResult == SOCKET_ERROR) {
 		closesocket(socket);
 		socket = INVALID_SOCKET;
-	}
 	return false;
+	}
+	return true;
 }
 
 bool WindowsNetworkAPI::MyBindFunc(MySocket socket, MyConnectionData * conData)
