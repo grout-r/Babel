@@ -123,13 +123,13 @@ bool WindowsNetworkAPI::sendMessage(const char * msg, MySocket socket)
 	return false;
 }
 
-void		WindowsNetworkAPI::MySelectFunc(MySocket socket)
-{
-	fd_set	rdfs;
 
-	FD_ZERO(&rdfs);
-	FD_SET(socket, &rdfs);
-	if (select(socket + 1, &rdfs, NULL, NULL, NULL) == -1)
+
+void		WindowsNetworkAPI::MySelectFunc(MySocket socket, fd_set &fdSet)
+{
+	FD_ZERO(&fdSet);
+	FD_SET(socket, &fdSet);
+	if (select(socket + 1, &fdSet, NULL, NULL, NULL) == -1)
 	{
 		perror("select()");
 		exit(0);

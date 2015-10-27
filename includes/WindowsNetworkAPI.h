@@ -22,7 +22,7 @@ public:
 	bool						MyListenFunc(MySocket);
 	MySocket					MyAcceptFunc(MySocket);
 	bool						sendMessage(const char *msg, MySocket);
-	void						MySelectFunc(MySocket socket);
+	void						MySelectFunc(MySocket socket, fd_set &fdSet);
 	std::string					rcvMessage(MySocket);
 	bool						closeConnection();
 };
