@@ -1,11 +1,11 @@
 #ifndef WNETWORKAPI_H_
 # define WNETWORKAPI_H_
 
-#ifdef _WIN32
+# ifdef _WIN32
 
-#include "NetworkDefines.h"
-#include "Network.h"
-#pragma comment(lib, "ws2_32.lib")
+# include "NetworkDefines.h"
+# include "Network.h"
+# pragma comment(lib, "ws2_32.lib")
 
 class							WindowsNetworkAPI : public Network
 {
@@ -31,7 +31,7 @@ public:
 
 
 	std::string					rcvMessage(MySocket);
-	bool						closeConnection();
+	bool						CloseConnection(MySocket);
 };
 
 #endif

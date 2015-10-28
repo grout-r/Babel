@@ -19,7 +19,7 @@ public:
 	virtual void						SetFD(MySocket socket, fd_set &fdSet) = 0;
 	virtual bool						CheckFdIsSet(MySocket sSocket, fd_set &readSet) = 0;
 	virtual std::string					rcvMessage(MySocket) = 0;
-	virtual bool						closeConnection() = 0;
+	virtual bool						CloseConnection(MySocket) = 0;
 };
 
 Network*								getNetworkInstance();

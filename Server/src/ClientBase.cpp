@@ -28,17 +28,17 @@ int				 ClientBase::getId() const
 	return _id;
 }
 
-std::string const ClientBase::getNickname() const
+std::string const& ClientBase::getNickname() const
 {
 	return _nick;
 }
 
-std::string const ClientBase::getLogin() const
+std::string const& ClientBase::getLogin() const
 {
 	return _login;
 }
 
-std::string const ClientBase::getPassword() const
+std::string const& ClientBase::getPassword() const
 {
 	return _password;
 }

@@ -21,9 +21,9 @@ public:
 	void				setStatus(int status);
 	int					getStatus() const;
 	int					getId() const;
-	std::string	const	getNickname() const;
-	std::string	const	getLogin() const;
-	std::string	const	getPassword() const;
+	std::string	const&	getNickname() const;
+	std::string	const&	getLogin() const;
+	std::string	const&	getPassword() const;
 	void				setNickname(std::string const& nickname);
 };
 

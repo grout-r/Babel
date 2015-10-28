@@ -1,5 +1,6 @@
 #include "Server.h"
 #include <Windows.h>
+#include <Algorithm>
 
 Server::Server(std::string const & ip, std::string const & port)
 	: _network(getNetworkInstance()), _dataHandler(new ClientDataHandler("storage_file.xml", 0)), _ip(ip), _port(port)
@@ -14,15 +15,18 @@ Server::~Server()
 {
 }
 
-void				Server::InitNetwork()
+bool				Server::InitNetwork()
 {
 	MyConnectionData*	conData;
 
 	_network->initNetwork();
-	conData = _network->getAddr(_ip.c_str(), _port.c_str(), AF_UNSPEC, SOCK_STREAM, IPPROTO_TCP, AI_PASSIVE);
-	_listen = _network->MySocketFunc(conData);
-	_network->MyBindFunc(_listen, conData);
-	_network->MyListenFunc(_listen);
+	if ((conData = _network->getAddr(NULL, _port.c_str(), AF_INET, SOCK_STREAM, IPPROTO_TCP, AI_PASSIVE)) == NULL)
+		return false;
+	if ((_listen = _network->MySocketFunc(conData)) == INVALID_SOCKET)
+		return false;
+	if (!_network->MyBindFunc(_listen, conData) || _network->MyListenFunc(_listen) == 0)
+		return false;
+	return true;
 }
 
 void				Server::InitFuncMap()
@@ -30,7 +34,6 @@ void				Server::InitFuncMap()
 	_funcMap.emplace("LOGIN", &Server::Login);
 	_funcMap.emplace("PASS", &Server::Password);
 	_funcMap.emplace("NICK", &Server::Nick);
-	_funcMap.emplace("GETCINFO", &Server::GetCInfo);
 	_funcMap.emplace("GETCLIST", &Server::GetCList);
 	_funcMap.emplace("RQ_CALL", &Server::RequestCall);
 	_funcMap.emplace("ACPT_CALL", &Server::AcceptCall);
@@ -38,7 +41,6 @@ void				Server::InitFuncMap()
 	_keyVector.push_back("LOGIN");
 	_keyVector.push_back("PASS");
 	_keyVector.push_back("NICK");
-	_keyVector.push_back("GETCINFO");
 	_keyVector.push_back("GETCLIST");
 	_keyVector.push_back("RQ_CALL");
 	_keyVector.push_back("ACPT_CALL");
@@ -54,6 +56,7 @@ void				Server::Start(void)
 		if (_network->CheckFdIsSet(_listen, _readSet))
 			StartNewClient();
 		CheckClientQueue();
+
 	}
 }
  
@@ -72,8 +75,19 @@ void				Server::CheckClientQueue()
 	for (std::deque<ClientRuntime*>::iterator it = _dataRuntime.begin(); it != _dataRuntime.end(); ++it)
 	{
 		if (_network->CheckFdIsSet((*it)->getSocket(), _readSet))
-			CommandParser((*it), _network->rcvMessage((*it)->getSocket()));
+		{
+			std::string str = _network->rcvMessage((*it)->getSocket());
+			if (str == "")
+				CloseClient((*it));
+			CommandParser((*it), str);
+		}
 	}
+}
+
+void				Server::CloseClient(ClientRuntime* client)
+{
+	_network->CloseConnection(client->getSocket());
+	_dataRuntime.erase(std::find(_dataRuntime.begin(), _dataRuntime.end(), client));
 }
 
 void				Server::CommandParser(ClientRuntime* client, std::string& input)
@@ -86,10 +100,15 @@ void				Server::CommandParser(ClientRuntime* client, std::string& input)
 	else
 		args = "";
 
+	if (command == "")
+	{
+		CloseClient(client);
+		return;
+	}
 	if (CheckCommand(command))
 		(this->*_funcMap[command])(client, args);
 	else
-		_network->sendMessage("103", client->getSocket());
+		_network->sendMessage("103 UNKNOWN COMMAND", client->getSocket());
 }
 
 MySocket Server::TryAcceptClient()
@@ -121,9 +140,9 @@ void				Server::StartNewClient()
 {
 	MySocket		socket = TryAcceptClient();
 
-	std::cout << "start" << std::endl;
 	if (socket != -1)
 		_dataRuntime.push_front(new ClientRuntime(socket));
+	std::cout << "start new client , fd = " << socket << std::endl;
 }
 
 /* BUILTIN */
@@ -148,31 +167,56 @@ void Server::Password(ClientRuntime* client, std::string& args)
 
 void Server::Nick(ClientRuntime* client, std::string& args)
 {
-	client->getBase()->setNickname(args);
-	_network->sendMessage("100", client->getSocket());
+	if (!client->isLoggedIn())
+		_network->sendMessage("102", client->getSocket());
+	else
+	{
+		client->getBase()->setNickname(args);
+		_network->sendMessage("100", client->getSocket());
+	}
 }
 
-void Server::GetCInfo(ClientRuntime* client, std::string& args)
+void Server::GetCInfo(ClientRuntime* client)
 {
+	std::string		str = "Client : " + client->getBase()->getNickname() + " ::  FD : " + std::to_string(client->getSocket()) + "\n";
 
-	_network->sendMessage("INSIDE getcinfo", client->getSocket());
+	_network->sendMessage(str.c_str(), client->getSocket());
 }
 
 void Server::GetCList(ClientRuntime* client, std::string& args)
 {
-	_network->sendMessage("INSIDE getclist", client->getSocket());
+	if (!client->isLoggedIn())
+		_network->sendMessage("102", client->getSocket());
+	else
+	{
+		_network->sendMessage("301", client->getSocket());
+		for (std::deque<ClientRuntime*>::iterator it = _dataRuntime.begin(); it != _dataRuntime.end(); ++it)
+			GetCInfo((*it));
+		_network->sendMessage("302", client->getSocket());
+	}
+
 }
 
 void Server::RequestCall(ClientRuntime* client, std::string& args)
 {
-	_network->sendMessage("INSIDE requestcall", client->getSocket());
+	if (!client->isLoggedIn())
+		_network->sendMessage("102", client->getSocket());
+	else
+		_network->sendMessage("INSIDE requestcall", client->getSocket());
 }
 
 void Server::AcceptCall(ClientRuntime* client, std::string& args)
 {
-	_network->sendMessage("INSIDE lzodo", client->getSocket());
+	if (!client->isLoggedIn())
+		_network->sendMessage("102", client->getSocket());
+	else
+		_network->sendMessage("INSIDE lzodo", client->getSocket());
 }
 
 void Server::RefuseCall(ClientRuntime* client, std::string& args)
 {
+	if (!client->isLoggedIn())
+		_network->sendMessage("102", client->getSocket());
+	else
+		_network->sendMessage("INSIDE lzodo", client->getSocket());
 }

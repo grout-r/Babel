@@ -38,22 +38,23 @@ private:
 
 private:
 	void							InitFuncMap();
-	void							InitNetwork();
+	bool							InitNetwork();
 	void							Start();
 	void							SetClientFD();
 	MySocket						TryAcceptClient();
 	bool							CheckCommand(std::string& str);
 	void							CheckClientQueue();
+	void							CloseClient(ClientRuntime* c);
 	void							StartNewClient();
 	void							CommandParser(ClientRuntime* client, std::string& input);
-	
+
+	void							GetCInfo(ClientRuntime* client);
 
 
 	/* BUILTIN */
 	void							Login(ClientRuntime* client, std::string& command);
 	void							Password(ClientRuntime* client, std::string& command);
 	void							Nick(ClientRuntime* client, std::string& command);
-	void							GetCInfo(ClientRuntime* client, std::string& command);
 	void							GetCList(ClientRuntime* client, std::string& command);
 	void							RequestCall(ClientRuntime* client, std::string& command);
 	void							AcceptCall(ClientRuntime* client, std::string& command);

@@ -30,7 +30,7 @@ MyConnectionData *WindowsNetworkAPI::getAddr(const char * ip, const char * port,
 	hints.ai_family = family;
 	hints.ai_socktype = socktype;
 	hints.ai_protocol = protocol;
-
+	hints.ai_addr = INADDR_ANY;
 	result = getaddrinfo(ip, port, &hints, &addr);
 	if (result != 0) {
 		printf("getaddrinfo failed: %d\n", result);
@@ -73,13 +73,15 @@ bool WindowsNetworkAPI::MyBindFunc(MySocket socket, MyConnectionData * conData)
 
 bool WindowsNetworkAPI::MyListenFunc(MySocket socket)
 {
-	if (listen(socket, SOMAXCONN) == SOCKET_ERROR) {
+	MySocket		sock;
+
+	if ((sock = listen(socket, SOMAXCONN)) == SOCKET_ERROR) {
 		printf("Listen failed with error: %ld\n", WSAGetLastError());
 		closesocket(socket);
 		WSACleanup();
-		return false;
+		return 0;
 	}
-	return true;
+	return sock;
 }
 
 MySocket WindowsNetworkAPI::MyAcceptFunc(MySocket ListenSocket)
@@ -143,8 +145,9 @@ std::string WindowsNetworkAPI::rcvMessage(MySocket socket)
 	return tmp;
 }
 
-bool WindowsNetworkAPI::closeConnection()
+bool WindowsNetworkAPI::CloseConnection(MySocket socket)
 {
+	closesocket(socket);
 	return false;
 }
 

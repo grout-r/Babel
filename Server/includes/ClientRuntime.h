@@ -13,10 +13,13 @@ public:
 private:
 	MySocket			_socket;
 
+	bool				_loggedIn;
 	std::string			_login;
 	ClientBase*			_base;
 
 public:
+	bool				isLoggedIn() const;
+	void				setLoggedIn(bool isLogged);
 	ClientBase*			getBase() const;
 	void				setBase(ClientBase* base);
 	MySocket			getSocket() const;
