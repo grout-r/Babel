@@ -19,6 +19,7 @@ private:
 public:
 	void						LoginIsSet(std::string const& str, ClientRuntime* runtime, std::deque<ClientBase*>& base);
 	bool						IsRightPassword(std::string const& str, ClientRuntime* runtime, std::deque<ClientBase*>& base);
+	ClientRuntime*				GetClientByID(std::deque<ClientBase*>& base, int ID);
 };
 
 #endif

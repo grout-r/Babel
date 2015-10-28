@@ -30,5 +30,6 @@ bool ClientDataHandler::IsRightPassword(std::string const & str, ClientRuntime* 
 		std::cout << base.front()->getStatus() << std::endl;
 		runtime->setBase(base.front());
 	}
+
 	return true;
 }

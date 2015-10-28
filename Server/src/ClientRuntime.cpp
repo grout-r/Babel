@@ -1,7 +1,7 @@
 #include "ClientRuntime.h"
 
 ClientRuntime::ClientRuntime(MySocket listen)
-	: _socket(listen), _login(""), _base(NULL)
+	: _socket(listen), _loggedIn(false), _login(""), _base(NULL)
 {
 }
 
@@ -43,3 +43,12 @@ void ClientRuntime::setLogin(std::string const & login)
 	_login = login;
 }
 
+bool	ClientRuntime::isLoggedIn() const
+{
+	return _loggedIn;
+}
+
+void				ClientRuntime::setLoggedIn(bool isLogged)
+{
+	_loggedIn = isLogged;
+}
