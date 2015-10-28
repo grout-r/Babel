@@ -1,7 +1,7 @@
--IC:/Users/roman/Documents/GitHubVisualStudio/Babel/Client/includes
--IC:/Users/roman/Documents/GitHubVisualStudio/Babel
--IC:/Users/roman/Documents/GitHubVisualStudio/Babel
+-IC:/Users/Arthur/Documents/GitHubVisualStudio/Babel/Client/includes
+-IC:/Users/Arthur/Documents/GitHubVisualStudio/Babel
+-IC:/Users/Arthur/Documents/GitHubVisualStudio/Babel
 -DWIN32
 -o
-C:/Users/roman/Documents/GitHubVisualStudio/Babel/Client/includes/moc_UserInterfaceController.cpp
-C:/Users/roman/Documents/GitHubVisualStudio/Babel/Client/includes/UserInterfaceController.h
+C:/Users/Arthur/Documents/GitHubVisualStudio/Babel/Client/includes/moc_UserInterfaceController.cpp
+C:/Users/Arthur/Documents/GitHubVisualStudio/Babel/Client/includes/UserInterfaceController.h
