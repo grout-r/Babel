@@ -33,7 +33,7 @@ void Core::start()
 	_uictrl->insertNewContact("Bobbette", 1220);
 	_uictrl->insertNewContact("Bobbette", 1220);
 	_uictrl->insertNewContact("Bobbo", 1221);
-	_uictrl->callRequest("Jean jacques");
+	//_uictrl->callRequest("Jean jacques");
 
 	_uictrl->run();
 }
@@ -71,4 +71,5 @@ void Core::connectToServer(GUIEvent event)
 {
 	if (slink.connect(event.ip, event.port) == false)
 		_uictrl->connectionError();
+	slink.login(event.username);
 }

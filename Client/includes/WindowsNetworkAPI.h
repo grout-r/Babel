@@ -21,9 +21,9 @@ public:
 	bool						MyBindFunc(MySocket, MyConnectionData*);
 	bool						MyListenFunc(MySocket);
 	MySocket					MyAcceptFunc(MySocket);
-	bool						sendMessage(const char *msg, MySocket);
 	void						MySelectFunc(MySocket socket, fd_set &fdSet);
-	std::string					rcvMessage(MySocket);
+	bool						sendMessage(const void *, int, MySocket);
+	int							rcvMessage(MySocket socket, void*buffer, int size);
 	bool						closeConnection();
 };
 
