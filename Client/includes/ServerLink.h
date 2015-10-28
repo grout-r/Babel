@@ -2,7 +2,7 @@
 # define SERVERLINK
 
 # include "NetworkAPI.h"
-
+# include "ClientPacket.h"
 /*
 virtual bool						initNetwork() = 0;
 virtual MyConnectionData*			getAddr(const char * ip, const char * port, int family, int socktype, int protocol, int flags) = 0;
@@ -16,7 +16,6 @@ virtual void						MySelectFunc(MySocket socket) = 0;
 virtual std::string					rcvMessage(MySocket) = 0;
 virtual bool						closeConnection() = 0;
 */
-
 class			ServerLink
 {
 public:
@@ -25,6 +24,8 @@ public:
 
 public:
 	bool		connect(std::string, std::string);
+	bool		login(std::string);
+	bool		sendTestMessage(std::string);
 
 private:
 	Network		*_net;

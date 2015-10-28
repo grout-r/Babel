@@ -1,6 +1,13 @@
+<<<<<<< HEAD
 -IC:/Users/Arthur/Documents/GitHubVisualStudio/Babel/Client/includes
 -IC:/Users/Arthur/Documents/GitHubVisualStudio/Babel
 -IC:/Users/Arthur/Documents/GitHubVisualStudio/Babel
+=======
+-IC:/Users/roman/Documents/GitHubVisualStudio/Babel/Client/includes
+-IC:/Users/roman/Documents/GitHubVisualStudio/Babel/CommonIncludes
+-IC:/Users/roman/Documents/GitHubVisualStudio/Babel
+-IC:/Users/roman/Documents/GitHubVisualStudio/Babel
+>>>>>>> 3fff051fbb46a23a66d71653d106bf3889b05d73
 -DWIN32
 -o
 C:/Users/Arthur/Documents/GitHubVisualStudio/Babel/Client/includes/moc_UserInterfaceController.cpp
