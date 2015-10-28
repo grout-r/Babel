@@ -14,6 +14,7 @@ find_package(Qt5Core)
 file(GLOB SOURCES src/*.cpp)
 
 include_directories(Client/includes)
+include_directories(CommonIncludes)
 
 
 qt5_wrap_cpp(moc_sources Client/includes/UserInterfaceController.h)
