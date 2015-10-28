@@ -222,3 +222,4 @@ CMakeFiles/
 CMakeCache.txt
 *.cmake
 /Babel_automoc.cpp
+*moc*
