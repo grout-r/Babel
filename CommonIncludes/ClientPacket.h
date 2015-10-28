@@ -4,7 +4,6 @@
 typedef enum e_ClientNetworkCommand
 {
 	LOGIN,
-	PASS,
 	NICKNAME,
 	GETCINFO,
 	GETCLIST,
@@ -23,12 +22,8 @@ typedef struct s_ClientPacket
 		struct LOGIN
 		{
 			char login[256];
+			char password[256];
 		} login;
-
-		struct PASS
-		{
-			char passwd[256];
-		} pass;
 
 		struct NICKNAME
 		{

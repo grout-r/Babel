@@ -137,10 +137,7 @@ void		WindowsNetworkAPI::MySelectFunc(MySocket socket, fd_set &fdSet)
 
 int WindowsNetworkAPI::rcvMessage(MySocket socket, void*buffer , int size)
 {
-	//char tmp[512];
-	//memset(tmp, 0, 512);
-	//int result = recv(socket, tmp, 512, 0);
-	//return std::string(tmp);
+	int result = recv(socket, (char*)buffer, size, 0);
 	return 0;
 }
 
