@@ -9,12 +9,12 @@ ClientRuntime::~ClientRuntime()
 {
 	if (_base)
 	{
-		_base->setStatus(0);
+		_base->setClientStatus(OFFLINE);
 		delete _base;
 	}
 }
 
-ClientBase* ClientRuntime::getBase() const
+ClientBase* ClientRuntime::getBase()
 {
 #ifdef _WIN32
 	return (_base != nullptr ? _base : nullptr);

@@ -20,7 +20,7 @@ private:
 public:
 	bool				isLoggedIn() const;
 	void				setLoggedIn(bool isLogged);
-	ClientBase*			getBase() const;
+	ClientBase*			getBase();
 	void				setBase(ClientBase* base);
 	MySocket			getSocket() const;
 	std::string	const&	getLogin() const;

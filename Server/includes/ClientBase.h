@@ -2,29 +2,30 @@
 # define CLIENTBASE_H_
 
 # include <string>
+# include "ServerPacket.h"
 
 class ClientBase
 {
 public:
-	ClientBase(int id, std::string const& nick, std::string const& login, std::string const& password);
+	ClientBase(ClientStatus status, int id, std::string const& nick, std::string const& login, std::string const& password);
 	ClientBase(std::string const& login);
 	~ClientBase();
 
 private:
-	int					_status;
-	int					_id;
-	std::string			_nick;
-	std::string			_login;
-	std::string			_password;
+	ClientStatus				_status;
+	int							_id;
+	std::string					_nick;
+	std::string					_login;
+	std::string					_password;
 	
 public:
-	void				setStatus(int status);
-	int					getStatus() const;
-	int					getId() const;
-	std::string	const&	getNickname() const;
-	std::string	const&	getLogin() const;
-	std::string	const&	getPassword() const;
-	void				setNickname(std::string const& nickname);
+	int							getId() const;
+	std::string					getNickname() const;
+	std::string	const&			getLogin() const;
+	std::string	const&			getPassword() const;
+	ClientStatus				getClientStatus() const;
+	void						setClientStatus(ClientStatus status);
+	void						setNickname(std::string const& nickname);
 };
 
 #endif

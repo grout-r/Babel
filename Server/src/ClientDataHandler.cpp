@@ -26,8 +26,7 @@ bool ClientDataHandler::IsRightPassword(std::string const & str, ClientRuntime* 
 		return false;
 	if (runtime->getBase() == NULL)
 	{
-		base.push_front(new ClientBase(_id++, runtime->getLogin(), runtime->getLogin(), str));
-		std::cout << base.front()->getStatus() << std::endl;
+		base.push_front(new ClientBase(CONNECTED, _id++, runtime->getLogin(), runtime->getLogin(), str));
 		runtime->setBase(base.front());
 	}
 
