@@ -96,18 +96,15 @@ MySocket WindowsNetworkAPI::MyAcceptFunc(MySocket ListenSocket)
 	return ClientSocket;
 }
 
-
-
-bool WindowsNetworkAPI::sendMessage(const char * msg, MySocket socket)
+bool WindowsNetworkAPI::sendMessage(const void *buffer, int size, MySocket socket)
 {
-	int iResult = send(socket, msg, (int)strlen(msg), 0);
-	if (iResult == SOCKET_ERROR) {
+	int iResult = send(socket, (char*)buffer, size, 0);
+	if (iResult == -1) {
 		printf("send failed: %d\n", WSAGetLastError());
 		closesocket(socket);
 		WSACleanup();
-		return 1;
+		return true;
 	}
-
 	return false;
 }
 
@@ -137,12 +134,9 @@ bool		WindowsNetworkAPI::CheckFdIsSet(MySocket readSocket, fd_set &readSet)
 	return false;
 }
 
-std::string WindowsNetworkAPI::rcvMessage(MySocket socket)
+int WindowsNetworkAPI::rcvMessage(MySocket socket, void* buffer, int size)
 {
-	char tmp[512];
-	memset(tmp, 0, 512);
-	int result = recv(socket, tmp, 512, 0);
-	return tmp;
+	return recv(socket, (char*)buffer, size, 0);
 }
 
 bool WindowsNetworkAPI::CloseConnection(MySocket socket)

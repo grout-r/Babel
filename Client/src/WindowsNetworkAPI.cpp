@@ -116,13 +116,10 @@ bool WindowsNetworkAPI::sendMessage(const void *buffer, int size, MySocket socke
 		printf("send failed: %d\n", WSAGetLastError());
 		closesocket(socket);
 		WSACleanup();
-		return 1;
+		return true;
 	}
-
 	return false;
 }
-
-
 
 void		WindowsNetworkAPI::MySelectFunc(MySocket socket, fd_set &fdSet)
 {
@@ -135,10 +132,9 @@ void		WindowsNetworkAPI::MySelectFunc(MySocket socket, fd_set &fdSet)
 	}
 }
 
-int WindowsNetworkAPI::rcvMessage(MySocket socket, void*buffer , int size)
+int WindowsNetworkAPI::rcvMessage(MySocket socket, void* buffer , int size)
 {
-	int result = recv(socket, (char*)buffer, size, 0);
-	return 0;
+	return recv(socket, (char*)buffer, size, 0);
 }
 
 bool WindowsNetworkAPI::closeConnection()

@@ -21,7 +21,7 @@ public:
 	bool						MyBindFunc(MySocket, MyConnectionData*);
 	bool						MyListenFunc(MySocket);
 	MySocket					MyAcceptFunc(MySocket);
-	bool						sendMessage(const char *msg, MySocket);
+	bool						sendMessage(const void *buffer, int size, MySocket socket);
 
 	void						MySelectFunc(MySocket socket, fd_set& readSet);
 	void						ZeroFD(fd_set& fdSet);
@@ -30,7 +30,7 @@ public:
 	bool						CheckFdIsSet(MySocket sSocket, fd_set &readSet);
 
 
-	std::string					rcvMessage(MySocket);
+	int							rcvMessage(MySocket, void* buffer, int size);
 	bool						CloseConnection(MySocket);
 };
 

@@ -10,6 +10,7 @@
 # include "ClientBase.h"
 # include "ClientDataHandler.h"
 # include "ClientRuntime.h"
+# include "ClientPacket.h"
 
 class Server;
 
