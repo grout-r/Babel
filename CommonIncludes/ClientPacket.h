@@ -1,9 +1,9 @@
 #ifndef CLIENTPACKET
-# define CLIENTPACKET
+#define CLIENTPACKET
 
 typedef enum e_ClientNetworkCommand
 {
-	LOGIN,
+	AUTH,
 	NICKNAME,
 	GETCINFO,
 	GETCLIST,
@@ -19,27 +19,27 @@ typedef struct s_ClientPacket
 
 	union data
 	{
-		struct LOGIN
+		struct					s_Auth
 		{
-			char login[256];
-			char password[256];
-		} login;
+			char username[56];
+			char password[56];
+		}						Auth;
 
-		struct NICKNAME
+		struct					s_Nick
 		{
-			char nickname[256];
-		} nickname;
+			char nick[256];
+		}						Nick;
 
-		struct GETCTINFO
+		struct					s_getCtInfo
 		{
 			int id;
-		} getctinfo;
+		}						GetCtInfo;
 
-		struct GETCLIST
+		struct					s_getCList
 		{
-		} getclist;
+		}						GetCList;
 
-		struct RQ_CALL
+		struct s_RqCalll
 		{
 			int id;
 		} rq_call;
@@ -58,4 +58,4 @@ typedef struct s_ClientPacket
 }				ClientPacket;
 
 
-# endif
+#endif	/* !CLIENTPACKET */

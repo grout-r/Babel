@@ -25,6 +25,9 @@ public:
 public:
 	bool		connect(std::string, std::string);
 	bool		login(std::string);
+	bool		nickname(std::string);
+	bool		getContactList();
+	bool		requestCall(int);
 	bool		sendTestMessage(std::string);
 
 private:

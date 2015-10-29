@@ -59,12 +59,12 @@ void Core::treatGuiEvents()
 
 void Core::outcomeCall(GUIEvent event)
 {
-	std::cout << "call" << std::endl;
+	slink.requestCall(event.id);
 }
 
 void Core::changeNick(GUIEvent event)
 {
-	std::cout << "nick" << std::endl;
+	slink.nickname(event.nickname);
 }
 
 void Core::connectToServer(GUIEvent event)

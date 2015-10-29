@@ -29,9 +29,45 @@ bool ServerLink::login(std::string login)
 	ClientPacket *packet = new ClientPacket;
 
 	memset(packet, 0, sizeof(*packet));
-	packet->command = LOGIN;
-	memset(packet->data.login.login, 0, sizeof(packet->data.login.login));
-	strncpy_s(packet->data.login.login, login.c_str(), login.size());
+	packet->command = AUTH;
+	memset(packet->data.Auth.username, 0, sizeof(packet->data.Auth.username));
+	strncpy_s(packet->data.Auth.username, login.c_str(), login.size());
+	if (_net->sendMessage(packet, sizeof(*packet), _serverSocket) == false)
+		return false;
+	return true;
+}
+
+bool ServerLink::nickname(std::string login)
+{
+	ClientPacket *packet = new ClientPacket;
+
+	memset(packet, 0, sizeof(*packet));
+	packet->command = NICKNAME;
+	memset(packet->data.Nick.nick, 0, sizeof(packet->data.Nick.nick));
+	strncpy_s(packet->data.Nick.nick, login.c_str(), login.size());
+	if (_net->sendMessage(packet, sizeof(*packet), _serverSocket) == false)
+		return false;
+	return true;
+}
+
+bool ServerLink::getContactList()
+{
+	ClientPacket *packet = new ClientPacket;
+
+	memset(packet, 0, sizeof(*packet));
+	packet->command = GETCLIST;
+	if (_net->sendMessage(packet, sizeof(*packet), _serverSocket) == false)
+		return false;
+	return true;
+}
+
+bool ServerLink::requestCall(int id)
+{
+	ClientPacket *packet = new ClientPacket;
+
+	memset(packet, 0, sizeof(*packet));
+	packet->command = RQ_CALL;
+	packet->data.rq_call.id = id;
 	if (_net->sendMessage(packet, sizeof(*packet), _serverSocket) == false)
 		return false;
 	return true;
