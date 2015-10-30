@@ -29,9 +29,9 @@ private:
 	Network*								_network;
 	ClientPacket*							_cPacket;
 	ServerPacket*							_sPacket;
-	ClientDataHandler*						_dataHandler;
 	std::deque<ClientBase*>					_dataBase;
 	std::deque<ClientRuntime*>				_dataRuntime;
+	ClientDataHandler*						_dataHandler;
 	int										_baseID;
 	std::map<ClientNetworkCommand, FPTR>	_funcMap;
 	std::vector<ClientNetworkCommand>		_keyVector;
@@ -53,7 +53,7 @@ private:
 	void									StartNewClient();
 	void									CommandParser(ClientRuntime* client);
 
-	void									GetCInfo(ClientRuntime* client);
+	void									GetCInfo(ClientBase* client, MySocket socket);
 
 
 	/* BUILTIN */

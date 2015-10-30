@@ -1,7 +1,7 @@
 #include "ClientBase.h"
 
-ClientBase::ClientBase(ClientStatus status, int id, std::string const & nick, std::string const & login, std::string const & password)
-	: _status(status), _id(id), _nick(nick), _login(login), _password(password)
+ClientBase::ClientBase(ClientStatus status, int id, std::string const & nick, std::string const & login, std::string const & password, std::list<int> contactList)
+	: _status(status), _id(id), _nick(nick), _login(login), _password(password), _contactList(contactList)
 {
 }
 
@@ -31,6 +31,11 @@ std::string const& ClientBase::getLogin() const
 std::string const& ClientBase::getPassword() const
 {
 	return _password;
+}
+
+std::list<int>& ClientBase::getContactList()
+{
+	return _contactList;
 }
 
 ClientStatus ClientBase::getClientStatus() const

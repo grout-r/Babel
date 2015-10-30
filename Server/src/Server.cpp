@@ -4,7 +4,7 @@
 #include <string>
 
 Server::Server(std::string const & ip, std::string const & port)
-	: _network(getNetworkInstance()), _cPacket(new ClientPacket()), _dataHandler(new ClientDataHandler("storage_file.xml", 0)), _ip(ip), _port(port)
+	: _network(getNetworkInstance()), _cPacket(new ClientPacket()), _dataHandler(new ClientDataHandler(std::string("ClientData.xml"), 0, _dataBase)), _ip(ip), _port(port)
 {
 	_baseID = 0;
 	InitNetwork();
@@ -14,6 +14,7 @@ Server::Server(std::string const & ip, std::string const & port)
 
 Server::~Server()
 {
+	_dataHandler->RefreshBase();
 }
 
 bool				Server::InitNetwork()
@@ -55,7 +56,6 @@ void				Server::Start(void)
 		if (_network->CheckFdIsSet(_listen, _readSet))
 			StartNewClient();
 		CheckClientQueue();
-
 	}
 }
  
@@ -139,12 +139,12 @@ void				Server::StartNewClient()
 
 void Server::Login(ClientRuntime* client)
 {
-	_dataHandler->LoginIsSet(_cPacket->data.Auth.username, client, _dataBase);
-	if (_dataHandler->IsRightPassword(_cPacket->data.Auth.password, client, _dataBase))
+	_dataHandler->LoginIsSet(_cPacket->data.Auth.username, client);
+	if (_dataHandler->IsRightPassword(_cPacket->data.Auth.password, client))
 	{
 		_sPacket->response = 200;
 		_network->sendMessage(_sPacket, sizeof(*_sPacket), client->getSocket());
-		GetCInfo(client);
+		GetCInfo(client->getBase(), client->getSocket());
 	}
 	else
 	{
@@ -168,13 +168,13 @@ void Server::Nick(ClientRuntime* client)
 	}
 }
 
-void Server::GetCInfo(ClientRuntime* client)
+void Server::GetCInfo(ClientBase* client, MySocket socket)
 {
 	_sPacket->response = 300;
-	_sPacket->data.GetCtInfo.id = client->getBase()->getId();
-	strncpy_s(_sPacket->data.GetCtInfo.nickname, client->getBase()->getNickname().c_str(), client->getBase()->getNickname().size());
-	_sPacket->data.GetCtInfo.status = client->getBase()->getClientStatus();
-	_network->sendMessage(_sPacket, sizeof(*_sPacket), client->getSocket());
+	_sPacket->data.GetCtInfo.id = client->getId();
+	strncpy_s(_sPacket->data.GetCtInfo.nickname, client->getNickname().c_str(), client->getNickname().size());
+	_sPacket->data.GetCtInfo.status = client->getClientStatus();
+	_network->sendMessage(_sPacket, sizeof(*_sPacket), socket);
 }
 
 void Server::GetCList(ClientRuntime* client)
@@ -188,8 +188,8 @@ void Server::GetCList(ClientRuntime* client)
 	{
 		_sPacket->response = 301;
 		_network->sendMessage(_sPacket, sizeof(*_sPacket), client->getSocket());
-		for (std::deque<ClientRuntime*>::iterator it = _dataRuntime.begin(); it != _dataRuntime.end(); ++it)
-			GetCInfo((*it));
+		for (std::list<int>::iterator it = client->getBase()->getContactList().begin(); it != client->getBase()->getContactList().end(); ++it)
+			GetCInfo(_dataHandler->GetClientByID((*it)), client->getSocket());
 		_sPacket->response = 302;
 		_network->sendMessage(_sPacket, sizeof(*_sPacket), client->getSocket());
 	}

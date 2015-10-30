@@ -3,6 +3,7 @@
 
 # include <fstream>
 # include <deque>
+# include <list>
 # include <map>
 # include "ClientBase.h"
 
@@ -10,18 +11,20 @@
 
 
 class XMLParser
-{/*
-	typedef void(XMLParser::*FCT)(void);*/
+{
 
 public:
-	XMLParser(std::string const& filename);
+	XMLParser(std::string const& filename, std::deque<ClientBase*>& queue);
 	~XMLParser();
+
+	int						Parser();
+	bool						Generator(int maxID);
 
 private:
 	std::string					_filename;
 	std::ifstream				_file;
-	std::deque<ClientBase*>		_queue;/*
-	std::map<std::string, FCT>	_fMap;*/
+	std::deque<ClientBase*>&	_queue;
+	std::list<int>				_contact;
 
 	std::string					_buffer;
 	int							_maxFD;
@@ -29,20 +32,28 @@ private:
 	std::string					_login;
 	std::string					_pass;
 	int							_id;
-public:
-	void						InitFMap();
+
+private:
+	std::string					GetFullPath(std::string const& filename);
 
 	/* PARSER */
-	bool						Parser();
+	void						EmptyContactList();
 	void						GetMaxFd();
 	bool						GetClient();
-	void							getID();
-	void			getNickname();
-	void			getLogin();
-	void			getPassword();
+	bool						GetContactList();
+	void						getID();
+	void						getNickname();
+	void						getLogin();
+	void						getPassword();
 
-	/* LEXER */
-	bool						Lexer();
+	/* GENERATOR */
+	void						WriteMaxID(int maxID, std::ofstream& file);
+	void						WriteID(int maxID, std::ofstream& file);
+	void						WriteNewClient(ClientBase* data, std::ofstream& file);
+	void						WriteNickname(std::string const& nickname, std::ofstream& file);
+	void						WriteLogin(std::string const& login, std::ofstream& file);
+	void						WritePassword(std::string const& password, std::ofstream& file);
+	void						WriteContactList(std::list<int>& cList, std::ofstream& file);
 
 };
 
