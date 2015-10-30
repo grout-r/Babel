@@ -3,6 +3,7 @@
 
 # include "NetworkAPI.h"
 # include "ClientPacket.h"
+
 /*
 virtual bool						initNetwork() = 0;
 virtual MyConnectionData*			getAddr(const char * ip, const char * port, int family, int socktype, int protocol, int flags) = 0;

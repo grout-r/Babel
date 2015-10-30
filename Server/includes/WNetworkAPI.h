@@ -7,12 +7,12 @@
 # include "Network.h"
 # pragma comment(lib, "ws2_32.lib")
 
-class							WindowsNetworkAPI : public Network
+class							WNetworkAPI : public Network
 {
 
 public:
-	WindowsNetworkAPI();
-	~WindowsNetworkAPI();
+	WNetworkAPI();
+	~WNetworkAPI();
 
 	bool						initNetwork();
 	MyConnectionData*			getAddr(const char * ip, const char * port, int family, int socktype, int protocol, int flags);

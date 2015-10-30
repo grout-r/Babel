@@ -30,21 +30,6 @@ MyConnectionData *WindowsNetworkAPI::getAddr(const char * ip, const char * port,
 	hints.ai_family = family;
 	hints.ai_socktype = socktype;
 	hints.ai_protocol = protocol;
-
-/*
-	if (mode == MODE_CLIENT)
-	{
-		hints.ai_family = AF_UNSPEC;
-		hints.ai_socktype = SOCK_STREAM;
-		hints.ai_protocol = IPPROTO_TCP;
-	}
-	else if (mode == MODE_SERVER)
-	{
-		hints.ai_family = AF_INET;
-		hints.ai_socktype = SOCK_STREAM;
-		hints.ai_protocol = IPPROTO_TCP;
-		hints.ai_flags = AI_PASSIVE;
-	}*/
 	result = getaddrinfo(ip, port, &hints, &addr);
 	if (result != 0) {
 		printf("getaddrinfo failed: %d\n", result);
@@ -68,7 +53,7 @@ bool WindowsNetworkAPI::MyConnectFunc(MySocket socket, MyConnectionData *addrInf
 	if (iResult == SOCKET_ERROR) {
 		closesocket(socket);
 		socket = INVALID_SOCKET;
-	return false;
+		return false;
 	}
 	return true;
 }
@@ -121,24 +106,14 @@ bool WindowsNetworkAPI::sendMessage(const void *buffer, int size, MySocket socke
 	return false;
 }
 
-void		WindowsNetworkAPI::MySelectFunc(MySocket socket, fd_set &fdSet)
-{
-	FD_ZERO(&fdSet);
-	FD_SET(socket, &fdSet);
-	if (select(socket + 1, &fdSet, NULL, NULL, NULL) == -1)
-	{
-		perror("select()");
-		exit(0);
-	}
-}
-
 int WindowsNetworkAPI::rcvMessage(MySocket socket, void* buffer , int size)
 {
 	return recv(socket, (char*)buffer, size, 0);
 }
 
-bool WindowsNetworkAPI::closeConnection()
+bool WindowsNetworkAPI::closeConnection(MySocket socket)
 {
+	closesocket(socket);
 	return false;
 }
 

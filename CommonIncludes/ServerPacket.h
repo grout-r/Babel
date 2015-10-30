@@ -4,6 +4,7 @@
 typedef enum e_ClientStatus
 {
 	CONNECTED,
+	AWAY,
 	OFFLINE
 }			ClientStatus;
 

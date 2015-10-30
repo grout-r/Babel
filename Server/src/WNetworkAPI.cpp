@@ -1,14 +1,14 @@
 #include "WNetworkAPI.h"
 
-WindowsNetworkAPI::WindowsNetworkAPI()
+WNetworkAPI::WNetworkAPI()
 {
 }
 
-WindowsNetworkAPI::~WindowsNetworkAPI()
+WNetworkAPI::~WNetworkAPI()
 {
 }
 
-bool WindowsNetworkAPI::initNetwork()
+bool WNetworkAPI::initNetwork()
 {
 	WSADATA wsaData;
 	int result;
@@ -21,7 +21,7 @@ bool WindowsNetworkAPI::initNetwork()
 	return false;
 }
 
-MyConnectionData *WindowsNetworkAPI::getAddr(const char * ip, const char * port, int family, int socktype, int protocol, int flags)
+MyConnectionData *WNetworkAPI::getAddr(const char * ip, const char * port, int family, int socktype, int protocol, int flags)
 {
 	struct addrinfo *addr = NULL, hints;
 	int result;
@@ -40,7 +40,7 @@ MyConnectionData *WindowsNetworkAPI::getAddr(const char * ip, const char * port,
 	return addr;
 }
 
-MySocket WindowsNetworkAPI::MySocketFunc(MyConnectionData *addrInfo)
+MySocket WNetworkAPI::MySocketFunc(MyConnectionData *addrInfo)
 {
 	MySocket Thatsocket = INVALID_SOCKET;
 	Thatsocket = socket(addrInfo->ai_family, addrInfo->ai_socktype,
@@ -48,17 +48,18 @@ MySocket WindowsNetworkAPI::MySocketFunc(MyConnectionData *addrInfo)
 	return Thatsocket;
 }
 
-bool WindowsNetworkAPI::MyConnectFunc(MySocket socket, MyConnectionData *addrInfo)
+bool WNetworkAPI::MyConnectFunc(MySocket socket, MyConnectionData *addrInfo)
 {
 	int iResult = connect(socket, addrInfo->ai_addr, (int)addrInfo->ai_addrlen);
 	if (iResult == SOCKET_ERROR) {
 		closesocket(socket);
 		socket = INVALID_SOCKET;
+		return false;
 	}
-	return false;
+	return true;
 }
 
-bool WindowsNetworkAPI::MyBindFunc(MySocket socket, MyConnectionData * conData)
+bool WNetworkAPI::MyBindFunc(MySocket socket, MyConnectionData * conData)
 {
 	if (bind(socket, conData->ai_addr, (int)conData->ai_addrlen) == SOCKET_ERROR)
 	{
@@ -71,7 +72,7 @@ bool WindowsNetworkAPI::MyBindFunc(MySocket socket, MyConnectionData * conData)
 	return true;
 }
 
-bool WindowsNetworkAPI::MyListenFunc(MySocket socket)
+bool WNetworkAPI::MyListenFunc(MySocket socket)
 {
 	MySocket		sock;
 
@@ -79,12 +80,12 @@ bool WindowsNetworkAPI::MyListenFunc(MySocket socket)
 		printf("Listen failed with error: %ld\n", WSAGetLastError());
 		closesocket(socket);
 		WSACleanup();
-		return 0;
+		return false;
 	}
-	return sock;
+	return true;
 }
 
-MySocket WindowsNetworkAPI::MyAcceptFunc(MySocket ListenSocket)
+MySocket WNetworkAPI::MyAcceptFunc(MySocket ListenSocket)
 {
 	SOCKET ClientSocket = INVALID_SOCKET;
 	ClientSocket = accept(ListenSocket, NULL, NULL);
@@ -96,7 +97,7 @@ MySocket WindowsNetworkAPI::MyAcceptFunc(MySocket ListenSocket)
 	return ClientSocket;
 }
 
-bool WindowsNetworkAPI::sendMessage(const void *buffer, int size, MySocket socket)
+bool WNetworkAPI::sendMessage(const void *buffer, int size, MySocket socket)
 {
 	int iResult = send(socket, (char*)buffer, size, 0);
 	if (iResult == -1) {
@@ -108,7 +109,7 @@ bool WindowsNetworkAPI::sendMessage(const void *buffer, int size, MySocket socke
 	return false;
 }
 
-void		WindowsNetworkAPI::MySelectFunc(MySocket socket, fd_set& readSet)
+void		WNetworkAPI::MySelectFunc(MySocket socket, fd_set& readSet)
 {
 	if (select(socket + 1, &readSet, NULL, NULL, NULL) == -1)
 	{
@@ -117,29 +118,29 @@ void		WindowsNetworkAPI::MySelectFunc(MySocket socket, fd_set& readSet)
 	}
 }
 
-void		WindowsNetworkAPI::ZeroFD(fd_set& fdSet)
+void		WNetworkAPI::ZeroFD(fd_set& fdSet)
 {
 	FD_ZERO(&fdSet);
 }
 
-void		WindowsNetworkAPI::SetFD(MySocket socket, fd_set& fdSet)
+void		WNetworkAPI::SetFD(MySocket socket, fd_set& fdSet)
 {
 	FD_SET(socket, &fdSet);
 }
 
-bool		WindowsNetworkAPI::CheckFdIsSet(MySocket readSocket, fd_set &readSet)
+bool		WNetworkAPI::CheckFdIsSet(MySocket readSocket, fd_set &readSet)
 {
 	if (FD_ISSET(readSocket, &readSet))
 		return true;
 	return false;
 }
 
-int WindowsNetworkAPI::rcvMessage(MySocket socket, void* buffer, int size)
+int WNetworkAPI::rcvMessage(MySocket socket, void* buffer, int size)
 {
 	return recv(socket, (char*)buffer, size, 0);
 }
 
-bool WindowsNetworkAPI::CloseConnection(MySocket socket)
+bool WNetworkAPI::CloseConnection(MySocket socket)
 {
 	closesocket(socket);
 	return false;
@@ -147,5 +148,5 @@ bool WindowsNetworkAPI::CloseConnection(MySocket socket)
 
 Network*						getNetworkInstance()
 {
-	return new WindowsNetworkAPI;
+	return new WNetworkAPI;
 }

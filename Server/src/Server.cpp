@@ -9,6 +9,7 @@ Server::Server(std::string const & ip, std::string const & port)
 	_baseID = 0;
 	InitNetwork();
 	InitFuncMap();
+	system("pause");
 	Start();
 }
 

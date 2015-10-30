@@ -21,10 +21,9 @@ public:
 	bool						MyBindFunc(MySocket, MyConnectionData*);
 	bool						MyListenFunc(MySocket);
 	MySocket					MyAcceptFunc(MySocket);
-	void						MySelectFunc(MySocket socket, fd_set &fdSet);
 	bool						sendMessage(const void *, int, MySocket);
 	int							rcvMessage(MySocket socket, void*buffer, int size);
-	bool						closeConnection();
+	bool						closeConnection(MySocket socket);
 };
 
 #endif

@@ -13,10 +13,9 @@ public:
 	virtual bool						MyBindFunc(MySocket, MyConnectionData*) = 0;
 	virtual bool						MyListenFunc(MySocket) = 0;
 	virtual MySocket					MyAcceptFunc(MySocket) = 0;
-	virtual void						MySelectFunc(MySocket socket, fd_set &fdSet) = 0;
 	virtual bool						sendMessage(const void *, int,  MySocket) = 0;
 	virtual int							rcvMessage(MySocket socket, void*buffer, int size) = 0;
-	virtual bool						closeConnection() = 0;
+	virtual bool						closeConnection(MySocket socket) = 0;
 };
 
 Network*								getNetworkInstance();
