@@ -89,7 +89,8 @@ MySocket WNetworkAPI::MyAcceptFunc(MySocket ListenSocket)
 {
 	SOCKET ClientSocket = INVALID_SOCKET;
 	ClientSocket = accept(ListenSocket, NULL, NULL);
-	if (ClientSocket == INVALID_SOCKET) {
+	if (ClientSocket == INVALID_SOCKET)
+	{
 		printf("accept failed: %d\n", WSAGetLastError());
 		closesocket(ListenSocket);
 		WSACleanup();
@@ -104,9 +105,9 @@ bool WNetworkAPI::sendMessage(const void *buffer, int size, MySocket socket)
 		printf("send failed: %d\n", WSAGetLastError());
 		closesocket(socket);
 		WSACleanup();
-		return true;
+		return false;
 	}
-	return false;
+	return true;
 }
 
 void		WNetworkAPI::MySelectFunc(MySocket socket, fd_set& readSet)

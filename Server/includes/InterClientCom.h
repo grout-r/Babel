@@ -20,7 +20,8 @@ private:
 public:
 	bool				Connect(std::string& ip, std::string& port);
 	bool				Accept(std::string& port);
-	void				SendData(std::string& str);
+	bool				TryAccept();
+	bool				SendData(std::string& str);
 	InterCPacket*		ReceiveData() const;
 };
 

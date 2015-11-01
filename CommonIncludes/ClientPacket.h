@@ -1,16 +1,16 @@
 #ifndef CLIENTPACKET
 #define CLIENTPACKET
 
-typedef enum e_ClientNetworkCommand
+typedef enum                    e_ClientNetworkCommand
 {
-	AUTH,
-	NICKNAME,
-	GETCINFO,
-	GETCLIST,
-	RQ_CALL,
-	ACPT_CALL,
-	REFU_CALL,
-}			ClientNetworkCommand;
+	AUTH = 10,
+	NICK = 12,
+	GETCINF = 14,
+	GETCLIST = 16,
+	RQ_CALL = 18,
+	ACPT_CALL = 20,
+	REFU_CALL = 22,
+}                               ClientNetworkCommand;
 
 typedef struct s_ClientPacket
 {
