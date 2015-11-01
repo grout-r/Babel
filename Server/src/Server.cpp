@@ -4,7 +4,7 @@
 #include <string>
 
 Server::Server(std::string const & ip, std::string const & port)
-	: _network(getNetworkInstance()), _cPacket(new ClientPacket()), _dataHandler(new ClientDataHandler(std::string("ClientData.xml"), 0, _dataBase)), _ip(ip), _port(port)
+	: _network(getNetworkInstance()), _cPacket(new ClientPacket()), _sPacket(new ServerPacket()), _dataHandler(new ClientDataHandler(std::string("ClientData.xml"), 0, _dataBase)), _ip(ip), _port(port)
 {
 	_baseID = 0;
 	InitNetwork();
@@ -35,13 +35,13 @@ bool				Server::InitNetwork()
 void				Server::InitFuncMap()
 {
 	_funcMap.emplace(AUTH, &Server::Login);
-	_funcMap.emplace(NICK, &Server::Nick);
+	_funcMap.emplace(NICKNAME, &Server::Nick);
 	_funcMap.emplace(GETCLIST, &Server::GetCList);
 	_funcMap.emplace(RQ_CALL, &Server::RequestCall);
 	_funcMap.emplace(ACPT_CALL, &Server::AcceptCall);
 	_funcMap.emplace(REFU_CALL, &Server::RefuseCall);
 	_keyVector.push_back(AUTH);
-	_keyVector.push_back(NICK);
+	_keyVector.push_back(NICKNAME);
 	_keyVector.push_back(GETCLIST);
 	_keyVector.push_back(RQ_CALL);
 	_keyVector.push_back(ACPT_CALL);
@@ -76,7 +76,8 @@ void				Server::CheckClientQueue()
 	{
 		if (_network->CheckFdIsSet((*it)->getSocket(), _readSet))
 		{
-			_network->rcvMessage((*it)->getSocket(), _cPacket, sizeof(*_cPacket));/*
+			if (_network->rcvMessage((*it)->getSocket(), _cPacket, sizeof(*_cPacket)) < 0)
+				CloseClient((*it));/*
 			std::cout << "paquet " << _cPacket->data.Auth.username << std::endl;*/
 			if (_cPacket == NULL)
 				CloseClient((*it));
@@ -93,6 +94,8 @@ void				Server::CloseClient(ClientRuntime* client)
 
 void				Server::CommandParser(ClientRuntime* client)
 {
+	std::cout << "Command parser : " << _cPacket->command << std::endl;
+	memset(_sPacket, 0, sizeof(*_sPacket));
 	if (CheckCommand(_cPacket->command))
 		(this->*_funcMap[_cPacket->command])(client);
 	else
@@ -100,6 +103,7 @@ void				Server::CommandParser(ClientRuntime* client)
 		_sPacket->response = STX_ERR;
 		_network->sendMessage(_sPacket, sizeof(*_sPacket), client->getSocket());
 	}
+	std::cout << "end of commandparser" << std::endl;
 }
 
 MySocket Server::TryAcceptClient()
@@ -141,10 +145,12 @@ void				Server::StartNewClient()
 void Server::Login(ClientRuntime* client)
 {
 	_dataHandler->LoginIsSet(_cPacket->data.Auth.username, client);
+	std::cout << "login set" << std::endl;
 	if (_dataHandler->IsRightPassword(_cPacket->data.Auth.password, client))
 	{
 		_sPacket->response = AUTH_OK;
-		_network->sendMessage(_sPacket, sizeof(*_sPacket), client->getSocket());
+		if (!_network->sendMessage(_sPacket, sizeof(*_sPacket), client->getSocket()))
+			std::cout << "error send message" << std::endl;
 		GetCInfo(client->getBase(), client->getSocket());
 	}
 	else

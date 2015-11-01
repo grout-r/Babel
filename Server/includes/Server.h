@@ -6,7 +6,7 @@
 # include <map>
 # include <vector>
 # include <sys/types.h>
-# include "Network.h"
+# include "NetworkAPI.h"
 # include "ClientBase.h"
 
 # include "ClientDataHandler.h"
