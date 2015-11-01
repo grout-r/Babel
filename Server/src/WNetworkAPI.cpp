@@ -93,6 +93,7 @@ MySocket WNetworkAPI::MyAcceptFunc(MySocket ListenSocket)
 	{
 		printf("accept failed: %d\n", WSAGetLastError());
 		closesocket(ListenSocket);
+		system("pause");
 		WSACleanup();
 	}
 	return ClientSocket;
@@ -117,6 +118,7 @@ void		WNetworkAPI::MySelectFunc(MySocket socket, fd_set& readSet)
 	if (select(socket + 1, &readSet, NULL, NULL, NULL) == -1)
 	{
 		perror("select()");
+		system("pause");
 		exit(0);
 	}
 }

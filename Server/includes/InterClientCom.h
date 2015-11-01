@@ -1,7 +1,7 @@
 #ifndef INTERCLIENTCOM_H_
 # define INTERCLIENTCOM_H_
 
-# include "Network.h"
+# include "NetworkAPI.h"
 # include "InterClientPacket.h"
 
 class InterClientCom

@@ -4,7 +4,7 @@
 # ifdef _WIN32
 
 # include "NetworkDefines.h"
-# include "Network.h"
+# include "NetworkAPI.h"
 # pragma comment(lib, "ws2_32.lib")
 
 class							WNetworkAPI : public Network

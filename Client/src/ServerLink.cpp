@@ -88,7 +88,7 @@ bool ServerLink::checkResponse()
 
 	if (_serverSocket == -1)
 		return false;
-	_net->rcvMessage(_serverSocket, pack, sizeof(pack));
+	_net->rcvMessage(_serverSocket, pack, sizeof(*pack));
 	std::cout << pack->response << std::endl;
 	return true;
 }
