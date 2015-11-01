@@ -3,6 +3,7 @@
 
 # include "NetworkAPI.h"
 # include "ClientPacket.h"
+# include "ServerPacket.h"
 
 /*
 virtual bool						initNetwork() = 0;
@@ -30,6 +31,7 @@ public:
 	bool		getContactList();
 	bool		requestCall(int);
 	bool		sendTestMessage(std::string);
+	bool		checkResponse();
 
 private:
 	Network		*_net;
