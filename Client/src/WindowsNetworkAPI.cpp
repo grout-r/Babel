@@ -101,9 +101,9 @@ bool WindowsNetworkAPI::sendMessage(const void *buffer, int size, MySocket socke
 		printf("send failed: %d\n", WSAGetLastError());
 		closesocket(socket);
 		WSACleanup();
-		return true;
+		return false;
 	}
-	return false;
+	return true;
 }
 
 int WindowsNetworkAPI::rcvMessage(MySocket socket, void* buffer , int size)
