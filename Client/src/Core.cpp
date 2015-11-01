@@ -42,6 +42,7 @@ void Core::start()
 void			Core::events()
 {
 	treatGuiEvents();
+	//slink.checkPacketFromServer();
 }
 
 void Core::treatGuiEvents()
