@@ -101,7 +101,9 @@ MySocket WNetworkAPI::MyAcceptFunc(MySocket ListenSocket)
 bool WNetworkAPI::sendMessage(const void *buffer, int size, MySocket socket)
 {
 	int iResult = send(socket, (char*)buffer, size, 0);
-	if (iResult == -1) {
+	std::cout << "size : " << iResult << std::endl;
+	if (iResult == -1) 
+	{
 		printf("send failed: %d\n", WSAGetLastError());
 		closesocket(socket);
 		WSACleanup();

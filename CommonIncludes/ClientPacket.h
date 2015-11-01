@@ -4,7 +4,7 @@
 typedef enum                    e_ClientNetworkCommand
 {
 	AUTH = 10,
-	NICK = 12,
+	NICKNAME = 12,
 	GETCINF = 14,
 	GETCLIST = 16,
 	RQ_CALL = 18,
