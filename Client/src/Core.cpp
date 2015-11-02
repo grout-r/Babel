@@ -19,6 +19,8 @@ Core::Core()
 	_GUImap.emplace(NICK, &Core::changeNick);
 	_GUImap.emplace(CALL, &Core::outcomeCall);
 	_NetMap.emplace(USER_INFO, &Core::userInfo);
+	_NetMap.emplace(INCOM_CALL, &Core::incomeCall);
+
 }
 
 Core::~Core()
@@ -46,7 +48,6 @@ void Core::start()
 	//_uictrl->insertNewContact("Bobbette", 1220);
 	//_uictrl->insertNewContact("Bobbette", 1220);
 	//_uictrl->insertNewContact("Bobbo", 1221);
-	//_uictrl->callRequest("Jean jacques");
 
 	_uictrl->run();
 }
@@ -108,5 +109,10 @@ void Core::userInfo(ServerPacket *pack)
 		_uictrl->insertNewContact(pack->data.UserInfo.nickname, pack->data.UserInfo.id);
 	if (pack->data.UserInfo.status == OFFLINE)
 		_uictrl->deleteContact(pack->data.UserInfo.id);
+}
+
+void Core::incomeCall(ServerPacket *packet)
+{
+	if (_uictrl->callRequest(packet->data.IncomingCall.) == true)
 }
 
