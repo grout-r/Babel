@@ -30,25 +30,24 @@ typedef struct					s_ServerPacket
 
 	union data
 	{
-		struct					s_getCtInfo
+		struct					s_UserInfo
 		{
 			int					id;
 			char				nickname[256];
 			ClientStatus		status;
+		}						UserInfo;
 
-		}						GetCtInfo;
-
-		struct					s_getRequestCallerInfo
+		struct					s_IncomingCall
 		{
 			int					id;
-		}						RequestCallerInfo;
+		}						IncomingCall;
 
-		struct					s_getCallerInfo
+		struct					s_CallRqAccept
 		{
 			int					id;
 			char				ip[56];
 			char				port[56];
-		}						GetCallerInfo;
+		}						CallRqAccept;
 
 	} data;
 }				ServerPacket;

@@ -72,23 +72,27 @@ void				Server::SetClientFD()
 
 void				Server::CheckClientQueue()
 {
-	for (std::deque<ClientRuntime*>::iterator it = _dataRuntime.begin(); it != _dataRuntime.end(); ++it)
+	for (std::deque<ClientRuntime*>::iterator it = _dataRuntime.begin(); it != _dataRuntime.end(); it++)
 	{
 		if (_network->CheckFdIsSet((*it)->getSocket(), _readSet))
 		{
-			if (_network->rcvMessage((*it)->getSocket(), _cPacket, sizeof(*_cPacket)) < 0)
-				CloseClient((*it));/*
-			std::cout << "paquet " << _cPacket->data.Auth.username << std::endl;*/
-			if (_cPacket == NULL)
+			if (_network->rcvMessage((*it)->getSocket(), _cPacket, sizeof(*_cPacket)) <= 0)
+			{
+				std::cout << "inside checkclient queue " << std::endl;
 				CloseClient((*it));
+			}
+			/*
+			std::cout << "paquet " << _cPacket->data.Auth.username << std::endl;*/
+			//if (_cPacket == NULL)
+			//	CloseClient((*it));
 			CommandParser((*it));
 		}
 	}
 }
 
 void				Server::CloseClient(ClientRuntime* client)
-{
-	_network->CloseConnection(client->getSocket());
+{/*
+	_network->CloseConnection(client->getSocket());*/
 	_dataRuntime.erase(std::find(_dataRuntime.begin(), _dataRuntime.end(), client));
 }
 
@@ -178,9 +182,9 @@ void Server::Nick(ClientRuntime* client)
 void Server::GetCInfo(ClientBase* client, MySocket socket)
 {
 	_sPacket->response = USER_INFO;
-	_sPacket->data.GetCtInfo.id = client->getId();
-	strncpy_s(_sPacket->data.GetCtInfo.nickname, client->getNickname().c_str(), client->getNickname().size());
-	_sPacket->data.GetCtInfo.status = client->getClientStatus();
+	_sPacket->data.UserInfo.id = client->getId();
+	strncpy_s(_sPacket->data.UserInfo.nickname, client->getNickname().c_str(), client->getNickname().size());
+	_sPacket->data.UserInfo.status = client->getClientStatus();
 	_network->sendMessage(_sPacket, sizeof(*_sPacket), socket);
 }
 
@@ -195,8 +199,10 @@ void Server::GetCList(ClientRuntime* client)
 	{
 		_sPacket->response = BEG_CTLIST;
 		_network->sendMessage(_sPacket, sizeof(*_sPacket), client->getSocket());
-		for (std::list<int>::iterator it = client->getBase()->getContactList().begin(); it != client->getBase()->getContactList().end(); ++it)
-			GetCInfo(_dataHandler->GetClientByID((*it)), client->getSocket());
+		//for (std::list<int>::iterator it = client->getBase()->getContactList().begin(); it != client->getBase()->getContactList().end(); ++it)
+		//	GetCInfo(_dataHandler->GetClientByID((*it)), client->getSocket());
+		for (std::deque<ClientBase*>::iterator it = _dataBase.begin(); it != _dataBase.end(); ++it)
+			GetCInfo((*it), client->getSocket());
 		_sPacket->response = END_CTLIST;
 		_network->sendMessage(_sPacket, sizeof(*_sPacket), client->getSocket());
 	}
@@ -212,7 +218,7 @@ void Server::RequestCall(ClientRuntime* client)
 	else
 	{
 		_sPacket->response = INCOM_CALL;
-		_sPacket->data.RequestCallerInfo.id = client->getBase()->getId();
+		_sPacket->data.IncomingCall.id = client->getBase()->getId();
 		_network->sendMessage(_sPacket, sizeof(*_sPacket), _cPacket->data.rq_call.id);
 	}
 }
@@ -227,9 +233,9 @@ void Server::AcceptCall(ClientRuntime* client)
 	else
 	{
 		_sPacket->response = CALL_RQ_ACPT;
-		_sPacket->data.GetCallerInfo.id = _cPacket->data.acpt_call.id;
-		strncpy_s(_sPacket->data.GetCallerInfo.ip, _cPacket->data.acpt_call.ip, strlen(_cPacket->data.acpt_call.ip));
-		strncpy_s(_sPacket->data.GetCallerInfo.port, (char*)_cPacket->data.acpt_call.port, sizeof(int));
+		_sPacket->data.CallRqAccept.id = _cPacket->data.acpt_call.id;
+		strncpy_s(_sPacket->data.CallRqAccept.ip, _cPacket->data.acpt_call.ip, strlen(_cPacket->data.acpt_call.ip));
+		strncpy_s(_sPacket->data.CallRqAccept.port, (char*)_cPacket->data.acpt_call.port, sizeof(int));
 	}
 }
 
@@ -243,7 +249,7 @@ void Server::RefuseCall(ClientRuntime* client)
 	else
 	{
 		_sPacket->response = CALL_RQ_REFU;
-		_sPacket->data.GetCallerInfo.id = _cPacket->data.acpt_call.id;
+		_sPacket->data.CallRqAccept.id = _cPacket->data.acpt_call.id;
 		_network->sendMessage(_sPacket, sizeof(*_sPacket), client->getSocket());
 	}
 }
