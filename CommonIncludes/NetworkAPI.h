@@ -20,9 +20,7 @@ public:
 	virtual void						MySelectFunc(MySocket socket, fd_set& readSet) = 0;
 	virtual void						ZeroFD(fd_set& fdSet) = 0;
 	virtual void						SetFD(MySocket socket, fd_set &fdSet) = 0;
-
 	virtual bool						CheckFdIsSet(MySocket sSocket, fd_set &readSet) = 0;
-
 };
 
 Network*								getNetworkInstance();

@@ -32,6 +32,7 @@ public:
 	bool		requestCall(int);
 	bool		sendTestMessage(std::string);
 	bool		checkResponse();
+	bool		checkMessage();
 
 private:
 	Network		*_net;

@@ -93,3 +93,23 @@ bool ServerLink::checkResponse()
 	std::cout << pack->response << std::endl;
 	return true;
 }
+
+bool ServerLink::checkMessage()
+{
+	fd_set		set;
+	char *tmp = (char*)malloc(sizeof(char) * 256);
+
+	if (_serverSocket == -1)
+		return false;
+	_net->ZeroFD(set);
+	_net->SetFD(_serverSocket, set);
+	_net->MySelectFunc(_serverSocket, set);
+	if (_net->CheckFdIsSet(_serverSocket, set))
+	{
+		std::cout << "coucou" << std::endl;
+		memset(tmp, 0, sizeof(char*) * 256);
+		_net->rcvMessage(_serverSocket, tmp, 5);
+		std::cout << "MSG" << tmp << std::endl;
+	}
+	return true;
+}
