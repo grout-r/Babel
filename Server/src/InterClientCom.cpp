@@ -33,9 +33,9 @@ bool			InterClientCom::Connect(std::string& ip, std::string& port)
 	if ((_peerSocket = _network->MySocketFunc(conData)) == INVALID_SOCKET)
 		return false;
 	std::cout << "2" << std::endl;
-	if ((_network->MyConnectFunc(_peerSocket, conData)) == false)
-		return false;
-	std::cout << "3" << std::endl;
+	//if ((_network->MyConnectFunc(_peerSocket, conData)) == false)
+	//	return false;
+	//std::cout << "3" << std::endl;
 	return true;
 }
 
@@ -53,9 +53,9 @@ bool InterClientCom::Accept(std::string & port)
 	if (!_network->MyBindFunc(_socket, conData))
 		return false;
 	std::cout << "3" << std::endl;
-	if (_network->MyListenFunc(_socket) == 0)
-		return false;
-	std::cout << "4" << std::endl;
+	//if (_network->MyListenFunc(_socket) == 0)
+	//	return false;
+	//std::cout << "4" << std::endl;
 	_peerSocket = _socket;
 	return true;
 }

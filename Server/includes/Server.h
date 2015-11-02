@@ -49,9 +49,10 @@ private:
 	MySocket								TryAcceptClient();
 	bool									CheckCommand(ClientNetworkCommand);
 	void									CheckClientQueue();
-	void									CloseClient(ClientRuntime* c);
+	void									CloseClient(std::deque<ClientRuntime*>::iterator& it, ClientRuntime* c);
 	void									StartNewClient();
 	void									CommandParser(ClientRuntime* client);
+	void									NoticeClientLeft(ClientRuntime* client);
 
 	void									GetCInfo(ClientBase* client, MySocket socket);
 

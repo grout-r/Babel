@@ -26,7 +26,7 @@ typedef enum                    e_ServerNetworkCommand
 
 typedef struct					s_ServerPacket
 {
-	int							response;
+	ServerNetworkCommand		response;
 
 	union data
 	{
@@ -40,6 +40,7 @@ typedef struct					s_ServerPacket
 		struct					s_IncomingCall
 		{
 			int					id;
+			char				nickname[256];
 		}						IncomingCall;
 
 		struct					s_CallRqAccept
