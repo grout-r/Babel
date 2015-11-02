@@ -94,22 +94,25 @@ bool ServerLink::checkResponse()
 	return true;
 }
 
-bool ServerLink::checkMessage()
+ServerPacket *ServerLink::checkMessage()
 {
-	fd_set		set;
-	char *tmp = (char*)malloc(sizeof(char) * 256);
+	fd_set			set;
+	ServerPacket	*pack;
+	struct timeval	tv;
 
 	if (_serverSocket == -1)
-		return false;
+		return NULL;
+	tv.tv_sec = 0;
+	tv.tv_usec = 1;
 	_net->ZeroFD(set);
 	_net->SetFD(_serverSocket, set);
-	_net->MySelectFunc(_serverSocket, set);
+	_net->MySelectFunc(_serverSocket, set, &tv);
 	if (_net->CheckFdIsSet(_serverSocket, set))
 	{
-		std::cout << "coucou" << std::endl;
-		memset(tmp, 0, sizeof(char*) * 256);
-		_net->rcvMessage(_serverSocket, tmp, 5);
-		std::cout << "MSG" << tmp << std::endl;
+		std::cout << "MESSAGE FROM SERVER" << std::endl;
+		pack = new ServerPacket;
+		_net->rcvMessage(_serverSocket, pack, sizeof(*pack));
+		return pack;
 	}
-	return true;
+	return NULL;
 }

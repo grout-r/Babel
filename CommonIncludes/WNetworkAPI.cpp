@@ -102,7 +102,6 @@ MySocket WNetworkAPI::MyAcceptFunc(MySocket ListenSocket)
 bool WNetworkAPI::sendMessage(const void *buffer, int size, MySocket socket)
 {
 	int iResult = send(socket, (char*)buffer, size, 0);
-	std::cout << "size : " << iResult << std::endl;
 	if (iResult == -1) 
 	{
 		printf("send failed: %d\n", WSAGetLastError());
@@ -113,9 +112,9 @@ bool WNetworkAPI::sendMessage(const void *buffer, int size, MySocket socket)
 	return true;
 }
 
-void		WNetworkAPI::MySelectFunc(MySocket socket, fd_set& readSet)
+void		WNetworkAPI::MySelectFunc(MySocket socket, fd_set& readSet, struct timeval *to)
 {
-	if (select(socket + 1, &readSet, NULL, NULL, NULL) == -1)
+	if (select(socket + 1, &readSet, NULL, NULL, to) == -1)
 	{
 		perror("select()");
 		system("pause");

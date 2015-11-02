@@ -54,6 +54,8 @@ QPushButton				*GUI::insertNewContact(std::string name, int id)
 	name = "Call " + name;
 	QPushButton *button = new QPushButton(name.c_str());
 
+	if (_contactList.find(id) != _contactList.end())
+		return NULL;
 	_contactList.emplace(id, button);
 	_contactListLayout->addWidget(button);
 	return button;
@@ -68,8 +70,6 @@ void					GUI::deleteContact(int id)
 		delete _contactList[id];
 		_contactList.erase(id);
 	}
-	for (it = _contactList.begin(); it != _contactList.end(); ++it)
-		std::cout << it->first << std::endl;
 }
 
 QPushButton			*GUI::getConnectServerButton()

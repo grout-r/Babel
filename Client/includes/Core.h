@@ -10,6 +10,7 @@ class			Core : public QObject
 {
 
 typedef void (Core::*GUIFuncptr)(GUIEvent);
+typedef void (Core::*NetFuncptr)(ServerPacket*);
 
 public:
 	Core();
@@ -21,9 +22,11 @@ public:
 
 private:
 	void		treatGuiEvents();
+	void		treatNetEvents();
 	void		outcomeCall(GUIEvent);
 	void		changeNick(GUIEvent);
 	void		connectToServer(GUIEvent);
+	void		userInfo(ServerPacket*);
 
 private:
 	UserInterfaceController *_uictrl;
@@ -31,6 +34,7 @@ private:
 
 private:
 	std::map<GUICommand, GUIFuncptr> _GUImap;
+	std::map<int, NetFuncptr> _NetMap;
 };
 
 #endif
