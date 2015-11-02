@@ -94,6 +94,20 @@ bool ServerLink::checkResponse()
 	return true;
 }
 
+bool ServerLink::sendResponseToCall(bool resp)
+{
+	ClientPacket *packet = new ClientPacket;
+
+	memset(packet, 0, sizeof(*packet));
+	if (resp == true)
+		packet->command = ACPT_CALL;
+	else
+		packet->command = REFU_CALL;
+	if (_net->sendMessage(packet, sizeof(*packet), _serverSocket) == false)
+		return false;
+	return true;
+}
+
 ServerPacket *ServerLink::checkMessage()
 {
 	fd_set			set;

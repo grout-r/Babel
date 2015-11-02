@@ -32,6 +32,7 @@ public:
 	bool		requestCall(int);
 	bool		sendTestMessage(std::string);
 	bool		checkResponse();
+	bool		sendResponseToCall(bool);
 	ServerPacket*		checkMessage();
 
 private:

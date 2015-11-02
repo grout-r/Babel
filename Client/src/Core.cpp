@@ -113,6 +113,5 @@ void Core::userInfo(ServerPacket *pack)
 
 void Core::incomeCall(ServerPacket *packet)
 {
-	if (_uictrl->callRequest(packet->data.IncomingCall.) == true)
+		slink.sendResponseToCall(_uictrl->callRequest(packet->data.IncomingCall.nickname));
 }
-
