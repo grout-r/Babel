@@ -23,6 +23,8 @@ void UserInterfaceController::insertNewContact(std::string name, int id)
 {
 	QPushButton* button;
 	button = _gui->insertNewContact(name, id);
+	if (button == NULL)
+		return;
 	connect(button, &QPushButton::clicked, 
 		[=]() { this->callSlot(id); });
 }

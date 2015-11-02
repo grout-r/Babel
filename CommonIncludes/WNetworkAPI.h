@@ -23,7 +23,7 @@ public:
 	MySocket					MyAcceptFunc(MySocket);
 	bool						sendMessage(const void *buffer, int size, MySocket socket);
 
-	void						MySelectFunc(MySocket socket, fd_set& readSet);
+	void						MySelectFunc(MySocket socket, fd_set& readSet, struct timeval *to);
 	void						ZeroFD(fd_set& fdSet);
 	void						SetFD(MySocket socket, fd_set &fdSet);
 

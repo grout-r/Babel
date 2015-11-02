@@ -16,8 +16,7 @@ public:
 	virtual bool						sendMessage(const void *, int,  MySocket) = 0;
 	virtual int							rcvMessage(MySocket socket, void*buffer, int size) = 0;
 	virtual bool						CloseConnection(MySocket socket) = 0;
-
-	virtual void						MySelectFunc(MySocket socket, fd_set& readSet) = 0;
+	virtual void						MySelectFunc(MySocket socket, fd_set& readSet, struct timeval *to) = 0;
 	virtual void						ZeroFD(fd_set& fdSet) = 0;
 	virtual void						SetFD(MySocket socket, fd_set &fdSet) = 0;
 	virtual bool						CheckFdIsSet(MySocket sSocket, fd_set &readSet) = 0;
