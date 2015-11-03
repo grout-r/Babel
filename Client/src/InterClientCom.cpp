@@ -1,7 +1,7 @@
 #include "InterClientCom.h"
 
 InterClientCom::InterClientCom(std::string& ip, std::string& port)
-	: _network(getNetworkInstance()), _packet(new InterCPacket)
+	: _network(getNetworkInstance())
 {
 	if (Connect(ip, port))
 		std::cout << "CLIENT CONNECTED" << std::endl;
@@ -53,10 +53,9 @@ bool InterClientCom::Accept(std::string & port)
 	if (!_network->MyBindFunc(_socket, conData))
 		return false;
 	std::cout << "3" << std::endl;
-	//if (_network->MyListenFunc(_socket) == 0)
-	//	return false;
-	//std::cout << "4" << std::endl;
-	_peerSocket = _socket;
+	if (_network->MyListenFunc(_socket) == 0)
+		return false;
+	std::cout << "4" << std::endl;
 	return true;
 }
 
@@ -65,18 +64,17 @@ bool			InterClientCom::TryAccept()
 	return ((_peerSocket = _network->MyAcceptFunc(_socket)) != INVALID_SOCKET ? true : false);
 }
 
-bool			InterClientCom::SendData(std::string& str)
+bool			InterClientCom::SendData(InterCPacket* pack)
 {
-	strncpy_s(_packet->message, str.c_str(), str.size());
-	if (_network->sendMessage(_packet, sizeof(*_packet), _peerSocket) == false)
+	if (_network->sendMessage(pack, sizeof(*pack), _peerSocket) == false)
 		return false;
 	return true;
 }
 
-InterCPacket*	InterClientCom::ReceiveData() const
+bool			InterClientCom::ReceiveData(InterCPacket* pack) const
 {
-	if (_network->rcvMessage(_peerSocket, _packet, sizeof(*_packet)) < 0)
-		return nullptr;
-	return _packet;
+	if (_network->rcvMessage(_peerSocket, pack, sizeof(*pack)) <= 0)
+		return false;
+	return true;
 }
 

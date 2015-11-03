@@ -114,8 +114,15 @@ void Core::userInfo(ServerPacket *pack)
 
 void Core::incomeCall(ServerPacket *packet)
 {
-		
-		slink.sendResponseToCall(_uictrl->callRequest(packet->data.IncomingCall.nickname), "ip", "port");
+	bool			response;
+
+	response = _uictrl->callRequest(packet->data.IncomingCall.nickname);
+
+	slink.sendResponseToCall(response, "ip", "port", packet->data.IncomingCall.id);
+	if (response)
+	{
+		int a;
+	}
 }
 
 void Core::acceptedCall(ServerPacket *pack)
