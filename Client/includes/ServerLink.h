@@ -32,7 +32,7 @@ public:
 	bool		requestCall(int);
 	bool		sendTestMessage(std::string);
 	bool		checkResponse();
-	bool		sendResponseToCall(bool);
+	bool		sendResponseToCall(bool, std::string, std::string);
 	ServerPacket*		checkMessage();
 
 private:
