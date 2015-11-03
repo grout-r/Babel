@@ -1,21 +1,7 @@
 #include "InterClientCom.h"
 
-InterClientCom::InterClientCom(std::string& ip, std::string& port)
-	: _network(getNetworkInstance())
+InterClientCom::InterClientCom()
 {
-	if (Connect(ip, port))
-		std::cout << "CLIENT CONNECTED" << std::endl;
-	else
-		std::cout << "CLIENT NOT CON" << std::endl;
-}
-
-InterClientCom::InterClientCom(std::string & port)
-	: _network(getNetworkInstance())
-{
-	if (Accept(port))
-		std::cout << "SERVER CONNECTED" << std::endl;
-	else
-		std::cout << "SERVER NOT CON" << std::endl;
 }
 
 InterClientCom::~InterClientCom()

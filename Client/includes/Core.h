@@ -5,7 +5,8 @@
 #include <map>
 #include "UserInterfaceController.h"
 #include "ServerLink.h"
-//#include "ClientIntercom"
+#include "InterClientCom.h"
+
 class			Core : public QObject
 {
 
@@ -29,14 +30,17 @@ private:
 	void		userInfo(ServerPacket*);
 	void		incomeCall(ServerPacket*);
 	void		acceptedCall(ServerPacket*);
+	void		audioCom();
 
 private:
 	UserInterfaceController *_uictrl;
-	ServerLink				slink;
+	ServerLink				_slink;
+	InterClientCom			_intercom;
+	bool					_isCommunicate;
 
 private:
-	std::map<GUICommand, GUIFuncptr> _GUImap;
-	std::map<int, NetFuncptr> _NetMap;
+	std::map<GUICommand, GUIFuncptr>	_GUImap;
+	std::map<int, NetFuncptr>			_NetMap;
 };
 
 #endif

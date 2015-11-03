@@ -15,6 +15,7 @@
 
 Core::Core()
 {
+	_isCommunicate = false;
 	_GUImap.emplace(CONNECT, &Core::connectToServer);
 	_GUImap.emplace(NICK, &Core::changeNick);
 	_GUImap.emplace(CALL, &Core::outcomeCall);
@@ -58,6 +59,8 @@ void			Core::events()
 {
 	treatGuiEvents();
 	treatNetEvents();
+	if (_isCommunicate)
+		audioCom();
 }
 
 void Core::treatGuiEvents()
@@ -77,7 +80,7 @@ void Core::treatNetEvents()
 {
 	ServerPacket		*pack;
 
-	pack = slink.checkMessage();
+	pack = _slink.checkMessage();
 	if (pack == NULL)
 		return;
 	if (_NetMap.find(pack->response) != _NetMap.end())
@@ -87,20 +90,20 @@ void Core::treatNetEvents()
 
 void Core::outcomeCall(GUIEvent event)
 {
-	slink.requestCall(event.id);
+	_slink.requestCall(event.id);
 }
 
 void Core::changeNick(GUIEvent event)
 {
-	slink.nickname(event.nickname);
+	_slink.nickname(event.nickname);
 }
 
 void Core::connectToServer(GUIEvent event)
 {
-	if (slink.connect(event.ip, event.port) == false)
+	if (_slink.connect(event.ip, event.port) == false)
 		_uictrl->connectionError();
-	slink.login(event.username);
-	slink.getContactList();
+	_slink.login(event.username);
+	_slink.getContactList();
 }
 
 void Core::userInfo(ServerPacket *pack)
@@ -116,16 +119,33 @@ void Core::incomeCall(ServerPacket *packet)
 {
 	bool			response;
 
-	response = _uictrl->callRequest(packet->data.IncomingCall.nickname);
+	if (_isCommunicate)
+		response = false;
+	else
+		response = _uictrl->callRequest(packet->data.IncomingCall.nickname);
 
-	slink.sendResponseToCall(response, "ip", "port", packet->data.IncomingCall.id);
+	_slink.sendResponseToCall(response, "ip", "4243", packet->data.IncomingCall.id);
 	if (response)
 	{
-		int a;
+		_intercom.Accept(std::string("4243"));
+		if ((_isCommunicate = _intercom.TryAccept()) == false)
+			return;
 	}
 }
 
 void Core::acceptedCall(ServerPacket *pack)
 {
 	std::cout << "accepted ! " << std::endl;
+}
+
+void Core::audioCom()
+{
+	InterCPacket *pack = new InterCPacket;
+
+	memset(pack, 0, sizeof(*pack));
+	_intercom.ReceiveData(pack);
+	std::cout << pack->message << std::endl;
+	memset(pack, 0, sizeof(*pack));
+	strncpy(pack->message, "aaaaaaaaa", strlen("aaaaaaaaa"));
+	_intercom.SendData(pack);
 }
