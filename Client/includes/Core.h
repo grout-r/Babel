@@ -27,6 +27,8 @@ private:
 	void		changeNick(GUIEvent);
 	void		connectToServer(GUIEvent);
 	void		userInfo(ServerPacket*);
+	void		incomeCall(ServerPacket*);
+	void		acceptedCall(ServerPacket*);
 
 private:
 	UserInterfaceController *_uictrl;
