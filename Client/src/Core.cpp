@@ -20,6 +20,7 @@ Core::Core()
 	_GUImap.emplace(CALL, &Core::outcomeCall);
 	_NetMap.emplace(USER_INFO, &Core::userInfo);
 	_NetMap.emplace(INCOM_CALL, &Core::incomeCall);
+	_NetMap.emplace(CALL_RQ_ACPT, &Core::acceptedCall);
 
 }
 
@@ -113,6 +114,11 @@ void Core::userInfo(ServerPacket *pack)
 
 void Core::incomeCall(ServerPacket *packet)
 {
-	if (_uictrl->callRequest(packet->data.IncomingCall.) == true)
+		
+		slink.sendResponseToCall(_uictrl->callRequest(packet->data.IncomingCall.nickname), "ip", "port");
 }
 
+void Core::acceptedCall(ServerPacket *pack)
+{
+	std::cout << "accepted ! " << std::endl;
+}

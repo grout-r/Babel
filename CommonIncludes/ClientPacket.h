@@ -46,7 +46,7 @@ typedef struct s_ClientPacket
 
 		struct ACPT_CALL
 		{
-			int port;
+			char port[56];
 			char ip[56];
 			int id;
 		} acpt_call;
@@ -54,7 +54,7 @@ typedef struct s_ClientPacket
 		struct REFU_CALL
 		{
 			int id;
-		};
+		} refu_call;
 	} data;
 }				ClientPacket;
 

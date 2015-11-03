@@ -116,10 +116,12 @@ void				Server::CommandParser(ClientRuntime* client)
 {
 	std::cout << "Command parser : " << _cPacket->command << std::endl;
 	memset(_sPacket, 0, sizeof(*_sPacket));
+	std::cout << "after memeset" << std::endl;
 	if (CheckCommand(_cPacket->command))
 		(this->*_funcMap[_cPacket->command])(client);
 	else
 	{
+		std::cout << "syntax error" << std::endl;
 		_sPacket->response = STX_ERR;
 		_network->sendMessage(_sPacket, sizeof(*_sPacket), client->getSocket());
 	}
@@ -229,6 +231,7 @@ void Server::GetCList(ClientRuntime* client)
 
 void Server::RequestCall(ClientRuntime* client)
 {
+	std::cout << "inside requestcall" << std::endl;
 	if (!client->isLoggedIn())
 	{
 		_sPacket->response = FORBIDDEN;
@@ -241,10 +244,13 @@ void Server::RequestCall(ClientRuntime* client)
 		strncpy_s(_sPacket->data.IncomingCall.nickname, client->getBase()->getNickname().c_str(), client->getBase()->getNickname().size());
 		_network->sendMessage(_sPacket, sizeof(*_sPacket), _dataHandler->GetSocketById(_dataRuntime, _cPacket->data.rq_call.id));
 	}
+	std::cout << "leaving requestcall" << std::endl;
 }
 
 void Server::AcceptCall(ClientRuntime* client)
 {
+	std::cout << "inside accept" << std::endl;
+	std::cout << "id : " << _cPacket->data.acpt_call.id << "   ip : " << _cPacket->data.acpt_call.ip << "   port : " << _cPacket->data.acpt_call.port << std::endl;
 	if (!client->isLoggedIn())
 	{
 		_sPacket->response = FORBIDDEN;
@@ -252,11 +258,12 @@ void Server::AcceptCall(ClientRuntime* client)
 	}
 	else
 	{
+		std::cout << "id : " << _cPacket->data.acpt_call.id << "   ip : " << _cPacket->data.acpt_call.ip << "   port : " << _cPacket->data.acpt_call.port << std::endl;
 		_sPacket->response = CALL_RQ_ACPT;
 		_sPacket->data.CallRqAccept.id = _cPacket->data.acpt_call.id;
 		strncpy_s(_sPacket->data.CallRqAccept.ip, _cPacket->data.acpt_call.ip, strlen(_cPacket->data.acpt_call.ip));
-		strncpy_s(_sPacket->data.CallRqAccept.port, (char*)_cPacket->data.acpt_call.port, sizeof(int));
-		_network->sendMessage(_sPacket, sizeof(*_sPacket), _dataHandler->GetSocketById(_dataRuntime, _cPacket->data.rq_call.id));
+		strncpy_s(_sPacket->data.CallRqAccept.port, (char*)_cPacket->data.acpt_call.port, 4);
+		_network->sendMessage(_sPacket, sizeof(*_sPacket), _dataHandler->GetSocketById(_dataRuntime, _cPacket->data.acpt_call.id));
 	}
 }
 
@@ -271,6 +278,6 @@ void Server::RefuseCall(ClientRuntime* client)
 	{
 		_sPacket->response = CALL_RQ_REFU;
 		_sPacket->data.CallRqAccept.id = _cPacket->data.acpt_call.id;
-		_network->sendMessage(_sPacket, sizeof(*_sPacket), _dataHandler->GetSocketById(_dataRuntime, _cPacket->data.rq_call.id));
+		_network->sendMessage(_sPacket, sizeof(*_sPacket), _dataHandler->GetSocketById(_dataRuntime, _cPacket->data.refu_call.id));
 	}
 }
