@@ -94,13 +94,17 @@ bool ServerLink::checkResponse()
 	return true;
 }
 
-bool ServerLink::sendResponseToCall(bool resp)
+bool ServerLink::sendResponseToCall(bool resp, std::string ip, std::string port)
 {
 	ClientPacket *packet = new ClientPacket;
 
 	memset(packet, 0, sizeof(*packet));
 	if (resp == true)
+	{
 		packet->command = ACPT_CALL;
+		strncpy(packet->data.acpt_call.ip, ip.c_str(), ip.size());
+		strncpy(packet->data.acpt_call.port, port.c_str(), port.size());
+	}
 	else
 		packet->command = REFU_CALL;
 	if (_net->sendMessage(packet, sizeof(*packet), _serverSocket) == false)
