@@ -7,8 +7,7 @@
 class InterClientCom
 {
 public:
-	InterClientCom(std::string& ip, std::string& port);
-	InterClientCom(std::string& port);
+	InterClientCom();
 	~InterClientCom();
 
 private:
@@ -23,6 +22,5 @@ public:
 	bool				SendData(InterCPacket *);
 	bool				ReceiveData(InterCPacket*) const;
 };
-
 
 #endif
