@@ -18,9 +18,15 @@ bool ServerLink::connect(std::string ip, std::string port)
 		AF_UNSPEC, SOCK_STREAM, IPPROTO_TCP, 0)) == NULL)
 		return false;
 	if ((_serverSocket = _net->MySocketFunc(_conData)) == INVALID_SOCKET)
+	{
+		_serverSocket = -1;
 		return false;
+	}
 	if ((_net->MyConnectFunc(_serverSocket, _conData)) == false)
+	{
+		_serverSocket = -1;
 		return false;
+	}
 //	send(_serverSocket, "test", strlen("test"), 0);
 	return true;
 }
@@ -29,6 +35,7 @@ bool ServerLink::login(std::string login)
 {
 	ClientPacket *packet = new ClientPacket;
 
+	if (_serverSocket)
 	memset(packet, 0, sizeof(*packet));
 	packet->command = AUTH;
 	memset(packet->data.Auth.username, 0, sizeof(packet->data.Auth.username));
@@ -94,7 +101,7 @@ bool ServerLink::checkResponse()
 	return true;
 }
 
-bool ServerLink::sendResponseToCall(bool resp, std::string ip, std::string port)
+bool ServerLink::sendResponseToCall(bool resp, std::string ip, std::string port, int id)
 {
 	ClientPacket *packet = new ClientPacket;
 
@@ -104,6 +111,7 @@ bool ServerLink::sendResponseToCall(bool resp, std::string ip, std::string port)
 		packet->command = ACPT_CALL;
 		strncpy(packet->data.acpt_call.ip, ip.c_str(), ip.size());
 		strncpy(packet->data.acpt_call.port, port.c_str(), port.size());
+		packet->data.acpt_call.id = id;
 	}
 	else
 		packet->command = REFU_CALL;
@@ -129,8 +137,10 @@ ServerPacket *ServerLink::checkMessage()
 	{
 		std::cout << "MESSAGE FROM SERVER" << std::endl;
 		pack = new ServerPacket;
-		_net->rcvMessage(_serverSocket, pack, sizeof(*pack));
-		return pack;
+		if (_net->rcvMessage(_serverSocket, pack, sizeof(*pack)) <= 0)
+			_serverSocket = -1;
+		else
+			return pack;
 	}
 	return NULL;
 }

@@ -77,14 +77,10 @@ void				Server::CheckClientQueue()
 		{
 			if (_network->rcvMessage((*it)->getSocket(), _cPacket, sizeof(*_cPacket)) <= 0)
 			{
-				std::cout << "inside checkclient queue " << std::endl;
 				CloseClient(it, (*it));
+				std::cout << "Client closed" << std::endl;
 				if (it == _dataRuntime.end())
-				{
-					std::cout << "before ret" << std::endl;
 					return;
-				}
-				std::cout << "after" << std::endl;
 			}
 			else
 				CommandParser((*it));
@@ -97,9 +93,8 @@ void					Server::CloseClient(std::deque<ClientRuntime*>::iterator& it, ClientRun
 	if (client->getBase() != nullptr)
 		client->getBase()->setClientStatus(OFFLINE);
 	NoticeClientLeft(client);
-	_network->CloseConnection(client->getSocket());
-	delete (client);
-	std::cout << "before rturn" << std::endl;
+	_network->CloseConnection(client->getSocket());/*
+	delete (client);*/
 	it = _dataRuntime.erase(std::find(_dataRuntime.begin(), _dataRuntime.end(), client));
 }
 
@@ -116,7 +111,6 @@ void				Server::CommandParser(ClientRuntime* client)
 {
 	std::cout << "Command parser : " << _cPacket->command << std::endl;
 	memset(_sPacket, 0, sizeof(*_sPacket));
-	std::cout << "after memeset" << std::endl;
 	if (CheckCommand(_cPacket->command))
 		(this->*_funcMap[_cPacket->command])(client);
 	else
@@ -158,7 +152,7 @@ void				Server::StartNewClient()
 
 	if (socket != -1)
 		_dataRuntime.push_front(new ClientRuntime(socket));
-	std::cout << "start new client , fd = " << socket << std::endl;
+	std::cout << "Start new client , fd = " << socket << std::endl;
 }
 
 /* BUILTIN */

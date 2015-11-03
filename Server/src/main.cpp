@@ -1,14 +1,12 @@
 #include "Server.h"
-#include "InterClientCom.h"
 #include <Windows.h>
 #include <string>
 
-
 int main()
 {
-	//Server *s = new Server("192.168.1.70", "4242");
+	Server *s = new Server("192.168.1.70", "4242");
 
-	
+	/*
 	//InterClientCom* com = new InterClientCom(std::string("4343"));
 	InterClientCom* com = new InterClientCom(std::string("192.168.1.28"), std::string("4343"));
 	InterCPacket* packet = new InterCPacket;
@@ -39,5 +37,6 @@ int main()
 		//	}
 		//}
 	}
+	*/
 	system("pause");
 }

@@ -5,7 +5,7 @@
 #include <map>
 #include "UserInterfaceController.h"
 #include "ServerLink.h"
-
+//#include "ClientIntercom"
 class			Core : public QObject
 {
 

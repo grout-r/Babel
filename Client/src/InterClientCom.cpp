@@ -1,7 +1,7 @@
 #include "InterClientCom.h"
 
 InterClientCom::InterClientCom(std::string& ip, std::string& port)
-	: _network(getNetworkInstance()), _packet(new InterCPacket)
+	: _network(getNetworkInstance())
 {
 	if (Connect(ip, port))
 		std::cout << "CLIENT CONNECTED" << std::endl;
@@ -53,9 +53,15 @@ bool InterClientCom::Accept(std::string & port)
 	if (!_network->MyBindFunc(_socket, conData))
 		return false;
 	std::cout << "3" << std::endl;
+<<<<<<< HEAD:Server/src/InterClientCom.cpp
 	//if (_network->MyListenFunc(_socket) == 0)
 	//	return false;
 	//std::cout << "4" << std::endl;
+=======
+	if (_network->MyListenFunc(_socket) == 0)
+		return false;
+	std::cout << "4" << std::endl;
+>>>>>>> c98135fb72b8659de63c64a55df74ca814a2f87b:Client/src/InterClientCom.cpp
 	return true;
 }
 
@@ -64,20 +70,30 @@ bool			InterClientCom::TryAccept()
 	return ((_peerSocket = _network->MyAcceptFunc(_socket)) != INVALID_SOCKET ? true : false);
 }
 
-bool			InterClientCom::SendData(std::string& str)
+bool			InterClientCom::SendData(InterCPacket* pack)
 {
+<<<<<<< HEAD:Server/src/InterClientCom.cpp
 	memset(_packet, 0, sizeof(*_packet));
 	strncpy_s(_packet->message, str.c_str(), str.size());
 	if (_network->sendMessage(_packet, sizeof(*_packet), _peerSocket) == false)
+=======
+	if (_network->sendMessage(pack, sizeof(*pack), _peerSocket) == false)
+>>>>>>> c98135fb72b8659de63c64a55df74ca814a2f87b:Client/src/InterClientCom.cpp
 		return false;
 	return true;
 }
 
-InterCPacket*	InterClientCom::ReceiveData() const
+bool			InterClientCom::ReceiveData(InterCPacket* pack) const
 {
+<<<<<<< HEAD:Server/src/InterClientCom.cpp
 	memset(_packet, 0, sizeof(*_packet));
 	if (_network->rcvMessage(_peerSocket, _packet, sizeof(*_packet)) < 0)
 		return nullptr;
 	return _packet;
+=======
+	if (_network->rcvMessage(_peerSocket, pack, sizeof(*pack)) <= 0)
+		return false;
+	return true;
+>>>>>>> c98135fb72b8659de63c64a55df74ca814a2f87b:Client/src/InterClientCom.cpp
 }
 

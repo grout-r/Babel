@@ -12,12 +12,16 @@ ClientDataHandler::~ClientDataHandler()
 
 void ClientDataHandler::LoginIsSet(std::string const & str, ClientRuntime* runtime)
 {
+	std::cout << "queue length : " << _base.size() << std::endl;
 	for (std::deque<ClientBase*>::iterator it = _base.begin(); it != _base.end(); ++it)
+	{
+		std::cout << "login : " << (*it)->getLogin() << std::endl;
 		if ((*it)->getLogin() == str)
 		{
-			runtime->setBase((*it));
-			break;
+			runtime->setBase((*it));/*
+			break;*/
 		}
+	}
 	runtime->setLogin(str);
 }
 

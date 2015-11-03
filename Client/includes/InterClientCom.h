@@ -13,7 +13,6 @@ public:
 
 private:
 	Network*			_network;
-	InterCPacket*		_packet;
 	MySocket			_socket;
 	MySocket			_peerSocket;
 
@@ -21,8 +20,8 @@ public:
 	bool				Connect(std::string& ip, std::string& port);
 	bool				Accept(std::string& port);
 	bool				TryAccept();
-	bool				SendData(std::string& str);
-	InterCPacket*		ReceiveData() const;
+	bool				SendData(InterCPacket *);
+	bool				ReceiveData(InterCPacket*) const;
 };
 
 
