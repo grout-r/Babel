@@ -52,7 +52,7 @@ void				Server::Start(void)
 	while (1)
 	{
 		SetClientFD();
-		_network->MySelectFunc(_listen, _readSet);
+		_network->MySelectFunc(_listen, _readSet, nullptr);
 		if (_network->CheckFdIsSet(_listen, _readSet))
 			StartNewClient();
 		CheckClientQueue();
@@ -239,7 +239,7 @@ void Server::RequestCall(ClientRuntime* client)
 		_sPacket->response = INCOM_CALL;
 		_sPacket->data.IncomingCall.id = client->getBase()->getId();
 		strncpy_s(_sPacket->data.IncomingCall.nickname, client->getBase()->getNickname().c_str(), client->getBase()->getNickname().size());
-		_network->sendMessage(_sPacket, sizeof(*_sPacket), _cPacket->data.rq_call.id);
+		_network->sendMessage(_sPacket, sizeof(*_sPacket), _dataHandler->GetSocketById(_dataRuntime, _cPacket->data.rq_call.id));
 	}
 }
 
@@ -256,6 +256,7 @@ void Server::AcceptCall(ClientRuntime* client)
 		_sPacket->data.CallRqAccept.id = _cPacket->data.acpt_call.id;
 		strncpy_s(_sPacket->data.CallRqAccept.ip, _cPacket->data.acpt_call.ip, strlen(_cPacket->data.acpt_call.ip));
 		strncpy_s(_sPacket->data.CallRqAccept.port, (char*)_cPacket->data.acpt_call.port, sizeof(int));
+		_network->sendMessage(_sPacket, sizeof(*_sPacket), _dataHandler->GetSocketById(_dataRuntime, _cPacket->data.rq_call.id));
 	}
 }
 
@@ -270,6 +271,6 @@ void Server::RefuseCall(ClientRuntime* client)
 	{
 		_sPacket->response = CALL_RQ_REFU;
 		_sPacket->data.CallRqAccept.id = _cPacket->data.acpt_call.id;
-		_network->sendMessage(_sPacket, sizeof(*_sPacket), client->getSocket());
+		_network->sendMessage(_sPacket, sizeof(*_sPacket), _dataHandler->GetSocketById(_dataRuntime, _cPacket->data.rq_call.id));
 	}
 }

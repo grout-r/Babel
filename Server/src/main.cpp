@@ -7,9 +7,9 @@
 int main()
 {
 	Server *s = new Server("192.168.1.70", "4242");
-
-
 	/*
+
+	
 	InterClientCom* com = new InterClientCom(std::string("4343"));
 	//InterClientCom* com = new InterClientCom(std::string("127.0.0.1"), std::string("4343"));
 	InterCPacket* packet = new InterCPacket;

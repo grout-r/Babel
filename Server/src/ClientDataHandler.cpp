@@ -48,3 +48,13 @@ void ClientDataHandler::RefreshBase()
 {
 	_bddHandler->Generator(_id);
 }
+
+MySocket ClientDataHandler::GetSocketById(std::deque<ClientRuntime*>& runtime, int id)
+{
+	for (std::deque<ClientRuntime*>::iterator it = runtime.begin(); it != runtime.end(); ++it)
+	{
+		if ((*it)->getBase()->getId() == id)
+			return (*it)->getSocket();
+	}
+	return -1;
+}

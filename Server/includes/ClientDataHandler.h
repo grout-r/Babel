@@ -24,6 +24,7 @@ public:
 	bool						IsRightPassword(std::string const& str, ClientRuntime* runtime);
 	ClientBase*					GetClientByID(int ID);
 	void						RefreshBase();
+	MySocket					GetSocketById(std::deque<ClientRuntime*>& runtime, int id);
 };
 
 #endif
