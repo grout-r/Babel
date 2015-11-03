@@ -124,7 +124,7 @@ void Core::incomeCall(ServerPacket *packet)
 	else
 		response = _uictrl->callRequest(packet->data.IncomingCall.nickname);
 
-	_slink.sendResponseToCall(response, "ip", "4243", packet->data.IncomingCall.id);
+	_slink.sendResponseToCall(response, "127.0.0.1", "4243", packet->data.IncomingCall.id);
 	if (response)
 	{
 		_intercom.Accept(std::string("4243"));
@@ -135,11 +135,15 @@ void Core::incomeCall(ServerPacket *packet)
 
 void Core::acceptedCall(ServerPacket *pack)
 {
-	std::cout << "accepted ! " << std::endl;
+	if (_intercom.Connect(
+		std::string(pack->data.CallRqAccept.ip), std::string(pack->data.CallRqAccept.port)) == false)
+		return;
+	_isCommunicate = true;
 }
 
 void Core::audioCom()
 {
+	std::cout << "audiocom\n";
 	InterCPacket *pack = new InterCPacket;
 
 	memset(pack, 0, sizeof(*pack));

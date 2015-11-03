@@ -24,6 +24,8 @@ typedef enum                    e_ServerNetworkCommand
 	CALL_RQ_REFU = 402
 }								ServerNetworkCommand;
 
+#pragma pack(1)
+
 typedef struct					s_ServerPacket
 {
 	ServerNetworkCommand		response;
@@ -52,5 +54,7 @@ typedef struct					s_ServerPacket
 
 	} data;
 }				ServerPacket;
+
+#pragma pack()
 
 #endif

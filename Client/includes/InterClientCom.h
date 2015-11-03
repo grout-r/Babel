@@ -23,5 +23,4 @@ public:
 	bool				ReceiveData(InterCPacket*) const;
 };
 
-
 #endif

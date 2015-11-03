@@ -2,6 +2,7 @@
 
 InterClientCom::InterClientCom()
 {
+	_network = getNetworkInstance();
 }
 
 InterClientCom::~InterClientCom()
@@ -19,7 +20,7 @@ bool			InterClientCom::Connect(std::string& ip, std::string& port)
 	if ((_peerSocket = _network->MySocketFunc(conData)) == INVALID_SOCKET)
 		return false;
 	std::cout << "2" << std::endl;
-	//if ((_network->MyConnectFunc(_peerSocket, conData)) == false)
+	//if ((_networkwork->MyConnectFunc(_peerSocket, conData)) == false)
 	//	return false;
 	//std::cout << "3" << std::endl;
 	return true;
@@ -59,8 +60,20 @@ bool			InterClientCom::SendData(InterCPacket* pack)
 
 bool			InterClientCom::ReceiveData(InterCPacket* pack) const
 {
-	if (_network->rcvMessage(_peerSocket, pack, sizeof(*pack)) <= 0)
-		return false;
+	struct timeval tv;
+	fd_set			set;
+
+	tv.tv_sec = 0;
+	tv.tv_usec = 1;
+	_network->ZeroFD(set);
+	_network->SetFD(_peerSocket, set);
+	_network->MySelectFunc(_peerSocket, set, &tv);
+	if (_network->CheckFdIsSet(_peerSocket, set))
+	{
+		std::cout << "MESSAGE FROM ANOTHER CLIENT" << std::endl;
+		if (_network->rcvMessage(_peerSocket, pack, sizeof(*pack)) <= 0)
+			return false;
+	}
 	return true;
 }
 
