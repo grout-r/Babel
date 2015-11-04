@@ -112,6 +112,11 @@ bool WNetworkAPI::sendMessage(const void *buffer, int size, MySocket socket)
 	return true;
 }
 
+int WNetworkAPI::rcvMessage(MySocket socket, void* buffer, int size)
+{
+	return recv(socket, (char*)buffer, size, 0);
+}
+
 void		WNetworkAPI::MySelectFunc(MySocket socket, fd_set& readSet, struct timeval *to)
 {
 	if (select(socket + 1, &readSet, NULL, NULL, to) == -1)
@@ -137,11 +142,6 @@ bool		WNetworkAPI::CheckFdIsSet(MySocket readSocket, fd_set &readSet)
 	if (FD_ISSET(readSocket, &readSet))
 		return true;
 	return false;
-}
-
-int WNetworkAPI::rcvMessage(MySocket socket, void* buffer, int size)
-{
-	return recv(socket, (char*)buffer, size, 0);
 }
 
 bool WNetworkAPI::CloseConnection(MySocket socket)

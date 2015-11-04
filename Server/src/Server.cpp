@@ -2,6 +2,7 @@
 #include <Windows.h>
 #include <Algorithm>
 #include <string>
+#include <intrin.h>
 
 Server::Server(std::string const & ip, std::string const & port)
 	: _network(getNetworkInstance()), _cPacket(new ClientPacket()), _sPacket(new ServerPacket()), _dataHandler(new ClientDataHandler(std::string("ClientData.xml"), 0, _dataBase)), _ip(ip), _port(port)
@@ -90,8 +91,8 @@ void				Server::CheckClientQueue()
 
 void					Server::CloseClient(std::deque<ClientRuntime*>::iterator& it, ClientRuntime* client)
 {
-	if (client->getBase() != nullptr)
-		client->getBase()->setClientStatus(OFFLINE);
+	if (_dataHandler->GetBaseClient(client) != nullptr)
+		_dataHandler->GetBaseClient(client)->setClientStatus(OFFLINE);
 	NoticeClientLeft(client);
 	_network->CloseConnection(client->getSocket());/*
 	delete (client);*/
@@ -103,7 +104,7 @@ void				Server::NoticeClientLeft(ClientRuntime* client)
 	for (std::deque<ClientRuntime*>::iterator it = _dataRuntime.begin(); it != _dataRuntime.end(); ++it)
 	{
 		if ((*it) != client)
-			GetCInfo(client->getBase(), (*it)->getSocket());
+			GetCInfo(_dataHandler->GetBaseClient(client), (*it)->getSocket());
 	}
 }
 
@@ -166,7 +167,7 @@ void Server::Login(ClientRuntime* client)
 		_sPacket->response = AUTH_OK;
 		if (!_network->sendMessage(_sPacket, sizeof(*_sPacket), client->getSocket()))
 			std::cout << "error send message" << std::endl;
-		GetCInfo(client->getBase(), client->getSocket());
+		GetCInfo(_dataHandler->GetBaseClient(client), client->getSocket());
 		NoticeClientLeft(client);
 	}
 	else
@@ -185,7 +186,7 @@ void Server::Nick(ClientRuntime* client)
 	}
 	else
 	{
-		client->getBase()->setNickname(_cPacket->data.Nick.nick);
+		_dataHandler->GetBaseClient(client)->setNickname(_cPacket->data.Nick.nick);
 		_sPacket->response = OK;
 		_network->sendMessage(_sPacket, sizeof(*_sPacket), client->getSocket());
 	}
@@ -193,6 +194,7 @@ void Server::Nick(ClientRuntime* client)
 
 void Server::GetCInfo(ClientBase* client, MySocket socket)
 {
+	std::cout << "inside getcinfo" << std::endl;
 	memset(_sPacket, 0, sizeof(*_sPacket));
 	_sPacket->response = USER_INFO;
 	_sPacket->data.UserInfo.id = client->getId();
@@ -212,11 +214,14 @@ void Server::GetCList(ClientRuntime* client)
 	{
 		_sPacket->response = BEG_CTLIST;
 		_network->sendMessage(_sPacket, sizeof(*_sPacket), client->getSocket());
-		//for (std::list<int>::iterator it = client->getBase()->getContactList().begin(); it != client->getBase()->getContactList().end(); ++it)
-		//	GetCInfo(_dataHandler->GetClientByID((*it)), client->getSocket());
 		for (std::deque<ClientBase*>::iterator it = _dataBase.begin(); it != _dataBase.end(); ++it)
-			if (client->getBase()->getId() != (*it)->getId())
+		{
+			if (_dataHandler->GetBaseClient(client)->getId() != (*it)->getId())
+			{
+				std::cout << "client id " << _dataHandler->GetBaseClient(client)->getId() << " est different de base id " << (*it)->getId() << std::endl;
 				GetCInfo((*it), client->getSocket());
+			}
+		}
 		memset(_sPacket, 0, sizeof(*_sPacket));
 		_sPacket->response = END_CTLIST;
 		_network->sendMessage(_sPacket, sizeof(*_sPacket), client->getSocket());
@@ -234,8 +239,8 @@ void Server::RequestCall(ClientRuntime* client)
 	else
 	{
 		_sPacket->response = INCOM_CALL;
-		_sPacket->data.IncomingCall.id = client->getBase()->getId();
-		strncpy_s(_sPacket->data.IncomingCall.nickname, client->getBase()->getNickname().c_str(), client->getBase()->getNickname().size());
+		_sPacket->data.IncomingCall.id = _dataHandler->GetBaseClient(client)->getId();
+		strncpy_s(_sPacket->data.IncomingCall.nickname, _dataHandler->GetBaseClient(client)->getNickname().c_str(), _dataHandler->GetBaseClient(client)->getNickname().size());
 		_network->sendMessage(_sPacket, sizeof(*_sPacket), _dataHandler->GetSocketById(_dataRuntime, _cPacket->data.rq_call.id));
 	}
 	std::cout << "leaving requestcall" << std::endl;
@@ -252,7 +257,6 @@ void Server::AcceptCall(ClientRuntime* client)
 	}
 	else
 	{
-		std::cout << "id : " << _cPacket->data.acpt_call.id << "   ip : " << _cPacket->data.acpt_call.ip << "   port : " << _cPacket->data.acpt_call.port << std::endl;
 		_sPacket->response = CALL_RQ_ACPT;
 		_sPacket->data.CallRqAccept.id = _cPacket->data.acpt_call.id;
 		strncpy_s(_sPacket->data.CallRqAccept.ip, _cPacket->data.acpt_call.ip, strlen(_cPacket->data.acpt_call.ip));
@@ -271,7 +275,7 @@ void Server::RefuseCall(ClientRuntime* client)
 	else
 	{
 		_sPacket->response = CALL_RQ_REFU;
-		_sPacket->data.CallRqAccept.id = _cPacket->data.acpt_call.id;
+		_sPacket->data.CallRqAccept.id = _cPacket->data.refu_call.id;
 		_network->sendMessage(_sPacket, sizeof(*_sPacket), _dataHandler->GetSocketById(_dataRuntime, _cPacket->data.refu_call.id));
 	}
 }

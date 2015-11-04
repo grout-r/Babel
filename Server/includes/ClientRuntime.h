@@ -15,15 +15,12 @@ private:
 
 	bool				_loggedIn;
 	std::string			_login;
-	ClientBase*			_base;
 
 public:
 	bool				isLoggedIn() const;
 	void				setLoggedIn(bool isLogged);
-	ClientBase*			getBase();
-	void				setBase(ClientBase* base);
 	MySocket			getSocket() const;
-	std::string	const&	getLogin() const;
+	std::string			getLogin() const;
 	void				setLogin(std::string const& login);
 };
 

@@ -22,7 +22,8 @@ private:
 public:
 	void						LoginIsSet(std::string const& str, ClientRuntime* runtime);
 	bool						IsRightPassword(std::string const& str, ClientRuntime* runtime);
-	ClientBase*					GetClientByID(int ID);
+	ClientBase*					GetBaseClient(std::string str);
+	ClientBase*					GetBaseClient(ClientRuntime* runtime);
 	void						RefreshBase();
 	MySocket					GetSocketById(std::deque<ClientRuntime*>& runtime, int id);
 };

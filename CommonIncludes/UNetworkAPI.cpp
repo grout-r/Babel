@@ -29,7 +29,7 @@ MyConnectionData *UNetworkAPI::getAddr(const char * ip, const char * port, int f
 	hints.ai_family = family;
 	hints.ai_socktype = socktype;
 	hints.ai_protocol = protocol;
-
+	hints.ai_addr = INADDR_ANY;
 	result = getaddrinfo(ip, port, &hints, &addr);
 	if (result != 0)
 	{
@@ -54,8 +54,9 @@ bool UNetworkAPI::MyConnectFunc(MySocket socket, MyConnectionData *addrInfo)
 	{
 		close(socket);
 		socket = -1;
+		return fasle;
 	}
-	return false;
+	return true;
 }
 
 bool UNetworkAPI::MyBindFunc(MySocket socket, MyConnectionData * conData)
@@ -99,24 +100,18 @@ bool UNetworkAPI::sendMessage(const char * msg, MySocket socket)
 	if (iResult == -1) {
 		printf("send failed\n");
 		close(socket);
-		return 1;
+		return false;
 	}
-	return false;
+	return true;
 }
 
-std::string UNetworkAPI::rcvMessage(MySocket socket)
+int UNetworkAPI::rcvMessage(MySocket socket, void* buffer, int size)
 {
-	char tmp[512];
-	memset(tmp, 0, 512);
-	int result = recv(socket, tmp, 512, 0);
-	return std::string(tmp);
+	return recv(socket, (char*)buffer, size, 0);
 }
 
 void		UNetworkAPI::MySelectFunc(MySocket socket, fd_set &readSet)
 {
-	FD_ZERO(&readSet);
-	FD_SET(STDIN_FILENO, &readSet);
-	FD_SET(socket, &readSet);
 	if (select(socket + 1, &readSet, NULL, NULL, NULL) == -1)
 	{
 		perror("select()");
@@ -124,8 +119,26 @@ void		UNetworkAPI::MySelectFunc(MySocket socket, fd_set &readSet)
 	}
 }
 
-bool UNetworkAPI::closeConnection()
+void		UNetworkAPI::ZeroFD(fd_set& fdSet)
 {
+	FD_ZERO(&fdSet);
+}
+
+void		UNetworkAPI::SetFD(MySocket socket, fd_set& fdSet)
+{
+	FD_SET(socket, &fdSet);
+}
+
+bool		UNetworkAPI::CheckFdIsSet(MySocket readSocket, fd_set &readSet)
+{
+	if (FD_ISSET(readSocket, &readSet))
+		return true;
+	return false;
+}
+
+bool UNetworkAPI::closeConnection(MySocket socket)
+{
+	close(socket)
 	return false;
 }
 

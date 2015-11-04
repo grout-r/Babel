@@ -1,31 +1,17 @@
 #include "ClientRuntime.h"
 
 ClientRuntime::ClientRuntime(MySocket listen)
-	: _socket(listen), _loggedIn(false), _login(""), _base(NULL)
+	: _socket(listen), _loggedIn(false), _login("")
 {
 }
 
 ClientRuntime::~ClientRuntime()
 {
-	if (_base)
-	{
-		_base->setClientStatus(OFFLINE);
-		delete _base;
-	}
-}
-
-ClientBase* ClientRuntime::getBase()
-{
-#ifdef _WIN32
-	return (_base != nullptr ? _base : nullptr);
-#elif __linux__
-	return (_base != NULL ? _base : NULL);
-#endif
-}
-
-void ClientRuntime::setBase(ClientBase * base)
-{
-	_base = base;
+	//if (GetBaseClient(_login) != NULL)
+	//{
+	//	_base->setClientStatus(OFFLINE);
+	//	delete _base;
+	//}
 }
 
 MySocket ClientRuntime::getSocket() const
@@ -33,7 +19,7 @@ MySocket ClientRuntime::getSocket() const
 	return _socket;
 }
 
-std::string	const&	ClientRuntime::getLogin() const
+std::string		ClientRuntime::getLogin() const
 {
 	return _login;
 }
