@@ -129,14 +129,17 @@ void Core::incomeCall(ServerPacket *packet)
 	{
 		_intercom.Accept(std::string("4243"));
 		if ((_isCommunicate = _intercom.TryAccept()) == false)
+		{
+			std::cout << "not accepted" << std::endl;
 			return;
+		}
 	}
+	std::cout << "accepted !\n";
 }
 
 void Core::acceptedCall(ServerPacket *pack)
 {
-	if (_intercom.Connect(
-		std::string(pack->data.CallRqAccept.ip), std::string(pack->data.CallRqAccept.port)) == false)
+	if (_intercom.Connect(std::string(pack->data.CallRqAccept.ip), std::string(pack->data.CallRqAccept.port)) == false)
 		return;
 	_isCommunicate = true;
 }
