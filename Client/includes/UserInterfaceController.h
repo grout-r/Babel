@@ -35,6 +35,7 @@ class UserInterfaceController : public QObject
 public:
 	UserInterfaceController();
 	~UserInterfaceController();
+
 	void						run();
 	void						insertNewContact(std::string, int);
 	void						deleteContact(int);

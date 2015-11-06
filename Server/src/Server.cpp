@@ -218,6 +218,7 @@ void Server::GetCList(ClientRuntime* client)
 		{
 			if (_dataHandler->GetBaseClient(client)->getId() != (*it)->getId())
 			{
+				std::cout << _dataHandler->GetBaseClient(client)->getId() << " n'est pas égal a " << (*it)->getId() << std::endl;
 				std::cout << "client id " << _dataHandler->GetBaseClient(client)->getId() << " est different de base id " << (*it)->getId() << std::endl;
 				GetCInfo((*it), client->getSocket());
 			}
