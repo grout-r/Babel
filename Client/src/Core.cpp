@@ -1,4 +1,5 @@
 #include "Core.h"
+#include "AudioController.h"
 
 /*	OK = 100,
 	KO = 101,
@@ -60,7 +61,7 @@ void			Core::events()
 	treatGuiEvents();
 	treatNetEvents();
 	if (_isCommunicate)
-		audioCom();
+		calling();
 }
 
 void Core::treatGuiEvents()
@@ -142,17 +143,22 @@ void Core::acceptedCall(ServerPacket *pack)
 	if (_intercom.Connect(std::string(pack->data.CallRqAccept.ip), std::string(pack->data.CallRqAccept.port)) == false)
 		return;
 	_isCommunicate = true;
+	_packetSend = new Sound::Encoded;
+	_packetReceived = new Sound::Encoded;
+	_audio;
+	_audio.startRecord();
+	_audio.startPlay();
 }
 
-void Core::audioCom()
-{
-	std::cout << "audiocom\n";
-	InterCPacket *pack = new InterCPacket;
-
-	memset(pack, 0, sizeof(*pack));
-	_intercom.ReceiveData(pack);
-	std::cout << pack->message << std::endl;
-	memset(pack, 0, sizeof(*pack));
-	strncpy(pack->message, "aaaaaaaaa", strlen("aaaaaaaaa"));
-	_intercom.SendData(pack);
+void Core::calling()
+{	
+	*_packetSend = _audio.SoundEvent();
+	memset(_packetSend, 0, sizeof(*_packetSend));
+	_intercom.SendData(_packetSend);
+	memset(_packetReceived, 0, sizeof(*_packetReceived));
+	_intercom.ReceiveData(_packetReceived);
+	_audio.player(*_packetReceived);
 }
+
+//audio.stopRecord();
+//audio.stopPlay();

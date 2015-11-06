@@ -22,15 +22,12 @@ void	AudioController::player(const Sound::Encoded &sound)
 	*outputD << codec->decode(sound);
 }
 
-void	AudioController::SoundEvent(IAudio *audio)
+Sound::Encoded	AudioController::SoundEvent()
 {
-//	Sound::Decoded sound;
-	outputD->setBuffer((inputD->getBuffer()));
-//	*inputD >> sound;
-//	std::cout << sound.size << std::endl;
-//	player(codec->encode(sound));
-//	if (sound.size)
-//		AudioController::SoundEvent(codec.encode(sound));
+	Sound::Decoded sound;
+
+	*inputD >> sound;
+	return (codec->encode(sound));
 }
 
 void	AudioController::startRecord(void)

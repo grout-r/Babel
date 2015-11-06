@@ -14,7 +14,7 @@ AudioOutput::~AudioOutput()
 	Pa_Terminate();
 }
 
-void	AudioOutput::initOutputDevice()
+void					AudioOutput::initOutputDevice()
 {
 	OutputParam.device = Pa_GetDefaultOutputDevice();
 	if (OutputParam.device == paNoDevice)
@@ -25,7 +25,7 @@ void	AudioOutput::initOutputDevice()
 	OutputParam.sampleFormat = paFloat32;
 }
 
-void	AudioOutput::startStream()
+void					AudioOutput::startStream()
 {
 	if (start == false)
 	{
@@ -37,7 +37,7 @@ void	AudioOutput::startStream()
 	}
 }
 
-void	AudioOutput::stopStream()
+void					AudioOutput::stopStream()
 {
 	if (start == true)
 	{
@@ -47,7 +47,7 @@ void	AudioOutput::stopStream()
 	}
 }
 
-IAudio	&AudioOutput::operator<<(const Sound::Decoded &sound)
+IAudio					&AudioOutput::operator<<(const Sound::Decoded &sound)
 {
 	if (sound.size)
 	{
@@ -59,15 +59,15 @@ IAudio	&AudioOutput::operator<<(const Sound::Decoded &sound)
 	return (*this);
 }
 
-IAudio	&AudioOutput::operator>>(Sound::Decoded &) { return (*this); }
+IAudio					&AudioOutput::operator>>(Sound::Decoded &) { return (*this); }
 
-void AudioOutput::setBuffer(std::list<Sound::Decoded> obj)
+void					AudioOutput::setBuffer(std::list<Sound::Decoded> obj)
 {
 	this->Buffers = obj;
 }
 
 
-int	AudioOutput::callback(const void *inputBuffer, void *outputBuffer, unsigned long frameCount, const PaStreamCallbackTimeInfo *timInfo, PaStreamCallbackFlags Flags, void *data)
+int						AudioOutput::callback(const void *inputBuffer, void *outputBuffer, unsigned long frameCount, const PaStreamCallbackTimeInfo *timInfo, PaStreamCallbackFlags Flags, void *data)
 {
 	AudioOutput *obj = reinterpret_cast<AudioOutput *>(data);
 
@@ -84,4 +84,4 @@ int	AudioOutput::callback(const void *inputBuffer, void *outputBuffer, unsigned 
 	return paContinue;
 }
 
-void	AudioOutput::SetSoundEventListener(IAudio::AudioEvent *) {}
+void					AudioOutput::SetSoundEventListener(IAudio::AudioEvent *) {}

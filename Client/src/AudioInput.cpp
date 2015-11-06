@@ -74,21 +74,25 @@ std::list<Sound::Decoded>		AudioInput::getBuffer()
 
 int	AudioInput::callback(const void *inputBuffer, void *outputBuffer, unsigned long frameCount, const PaStreamCallbackTimeInfo *timInfo, PaStreamCallbackFlags Flags, void *data)
 {
-	//std::cout << "callback" << std::endl;
 	AudioInput *obj = reinterpret_cast<AudioInput *>(data);
 
 	Sound::Decoded sound;
 	sound.size = frameCount * CHANNEL;
 	sound.buffer.assign(reinterpret_cast<const float *>(inputBuffer), reinterpret_cast<const float *>(inputBuffer) + frameCount * CHANNEL);
 	obj->Buffers.push_back(sound);
-	
-	//if (obj->Listen)
-	//	obj->Listen->SoundEvent(obj);
 	return paContinue;
 }
 
-void	AudioInput::SetSoundEventListener(IAudio::AudioEvent *lst)
+void							AudioInput::SetSoundEventListener(IAudio::AudioEvent *lst)
 {
 	this->Listen = lst;
-	std::cout << "listennnnnnnnnnnnnnnnnnnnnnnnn" << std::endl;
+}
+
+Sound::Decoded				AudioInput::getSound()
+{
+	Sound::Decoded			sound;
+	
+	sound = this->Buffers.front();
+	this->Buffers.pop_front();
+	return (sound);
 }
