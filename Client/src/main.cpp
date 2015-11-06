@@ -2,11 +2,11 @@
 #include "Core.h"
 #include "InterClientCom.h"
 #include "InterClientPacket.h"
-#include "portaudio.h"
-#include "AudioController.h"
+////#include "portaudio.h"
+//#include "AudioController.h"
 
 int main()
-{
+{/*
 	AudioController tt;
 	IAudio *a = new AudioInput();
 
@@ -16,11 +16,11 @@ int main()
 	tt.SoundEvent(a);
 	tt.startPlay();
 	Pa_Sleep(10000);
-	tt.stopPlay();
+	tt.stopPlay();*/
 
-	//Core core;
-	//InterCPacket *pack = new InterCPacket;
+	Core core;
+	InterCPacket *pack = new InterCPacket;
 
-	//core.start();
+	core.start();
 
 }
