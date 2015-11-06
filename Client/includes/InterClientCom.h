@@ -2,7 +2,7 @@
 # define INTERCLIENTCOM_H_
 
 # include "NetworkAPI.h"
-# include "InterClientPacket.h"
+# include "AudioController.h"
 
 class InterClientCom
 {
@@ -19,8 +19,8 @@ public:
 	bool				Connect(std::string& ip, std::string& port);
 	bool				Accept(std::string& port);
 	bool				TryAccept();
-	bool				SendData(InterCPacket *);
-	bool				ReceiveData(InterCPacket*) const;
+	bool				SendData(Sound::Encoded *);
+	bool				ReceiveData(Sound::Encoded*) const;
 };
 
 #endif

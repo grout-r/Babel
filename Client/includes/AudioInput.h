@@ -25,6 +25,7 @@ public:
 	static int		callback(const void *inputBuffer, void *outputBuffer, unsigned long framesPerBuffer, const PaStreamCallbackTimeInfo *timeInfo, PaStreamCallbackFlags Flags, void *userData);
 	std::list<Sound::Decoded>		getBuffer();
 	void							setBuffer(std::list<Sound::Decoded>		Buffers) {};
+	Sound::Decoded					getSound();
 
 public:
 	void	SetSoundEventListener(IAudio::AudioEvent *);

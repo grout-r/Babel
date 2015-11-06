@@ -49,14 +49,14 @@ bool			InterClientCom::TryAccept()
 	return true;
 }
 
-bool			InterClientCom::SendData(InterCPacket* pack)
+bool			InterClientCom::SendData(Sound::Encoded* pack)
 {
 	if (_network->sendMessage(pack, sizeof(*pack), _peerSocket) == false)
 		return false;
 	return true;
 }
 
-bool			InterClientCom::ReceiveData(InterCPacket* pack) const
+bool			InterClientCom::ReceiveData(Sound::Encoded* pack) const
 {
 	struct timeval tv;
 	fd_set			set;

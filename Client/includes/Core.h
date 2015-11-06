@@ -30,13 +30,16 @@ private:
 	void		userInfo(ServerPacket*);
 	void		incomeCall(ServerPacket*);
 	void		acceptedCall(ServerPacket*);
-	void		audioCom();
+	void		calling();
 
 private:
 	UserInterfaceController *_uictrl;
+	Sound::Encoded			*_packetSend;
+	Sound::Encoded			*_packetReceived;
 	ServerLink				_slink;
 	InterClientCom			_intercom;
 	bool					_isCommunicate;
+	AudioController			_audio;
 
 private:
 	std::map<GUICommand, GUIFuncptr>	_GUImap;

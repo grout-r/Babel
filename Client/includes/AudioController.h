@@ -6,7 +6,7 @@
 # include "AudioInput.h"
 # include "AudioOutput.h"
 
-class AudioController : public IAudio::AudioEvent
+class AudioController
 {
 public:
 	AudioController();
@@ -17,11 +17,8 @@ private:
 	const AudioController &operator=(const AudioController &) {};
 
 public:
-	void	SoundEvent(IAudio *audio);
-	void	player(const Sound::Encoded &);
-
-public:
-
+	Sound::Encoded	SoundEvent();
+	void			player(const Sound::Encoded &);
 
 public:
 	void	startPlay();
