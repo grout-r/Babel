@@ -5,6 +5,7 @@
 #include <Windows.h>
 #include <intrin.h>
 #endif
+#include <string.h>
 
 Server::Server(std::string const & ip, std::string const & port)
 	: _network(getNetworkInstance()), _cPacket(new ClientPacket()), _sPacket(new ServerPacket()), _dataHandler(new ClientDataHandler(std::string("ClientData.xml"), 0, _dataBase)), _ip(ip), _port(port)
@@ -17,7 +18,6 @@ Server::Server(std::string const & ip, std::string const & port)
 
 Server::~Server()
 {
-	_dataHandler->RefreshBase();
 }
 
 bool				Server::InitNetwork()
@@ -27,7 +27,7 @@ bool				Server::InitNetwork()
 	_network->initNetwork();
 	if ((conData = _network->getAddr(NULL, _port.c_str(), AF_INET, SOCK_STREAM, IPPROTO_TCP, AI_PASSIVE)) == NULL)
 		return false;
-	if ((_listen = _network->MySocketFunc(conData)) == INVALID_SOCKET)
+	if ((_listen = _network->MySocketFunc(conData)) == -1)
 		return false;
 	if (!_network->MyBindFunc(_listen, conData) || _network->MyListenFunc(_listen) == 0)
 		return false;
@@ -36,12 +36,12 @@ bool				Server::InitNetwork()
 
 void				Server::InitFuncMap()
 {
-	_funcMap.emplace(AUTH, &Server::Login);
-	_funcMap.emplace(NICKNAME, &Server::Nick);
-	_funcMap.emplace(GETCLIST, &Server::GetCList);
-	_funcMap.emplace(RQ_CALL, &Server::RequestCall);
-	_funcMap.emplace(ACPT_CALL, &Server::AcceptCall);
-	_funcMap.emplace(REFU_CALL, &Server::RefuseCall);
+	_funcMap[AUTH] = &Server::Login;
+	_funcMap[NICKNAME] = &Server::Nick;
+	_funcMap[GETCLIST] = &Server::GetCList;
+	_funcMap[RQ_CALL] = &Server::RequestCall;
+	_funcMap[ACPT_CALL] = &Server::AcceptCall;
+	_funcMap[REFU_CALL] = &Server::RefuseCall;
 	_keyVector.push_back(AUTH);
 	_keyVector.push_back(NICKNAME);
 	_keyVector.push_back(GETCLIST);
@@ -55,7 +55,7 @@ void				Server::Start(void)
 	while (1)
 	{
 		SetClientFD();
-		_network->MySelectFunc(_listen, _readSet, nullptr);
+		_network->MySelectFunc(_listen, _readSet, NULL);
 		if (_network->CheckFdIsSet(_listen, _readSet))
 			StartNewClient();
 		CheckClientQueue();
@@ -93,11 +93,11 @@ void				Server::CheckClientQueue()
 
 void					Server::CloseClient(std::deque<ClientRuntime*>::iterator& it, ClientRuntime* client)
 {
-	if (_dataHandler->GetBaseClient(client) != nullptr)
+	if (_dataHandler->GetBaseClient(client) != NULL)
 		_dataHandler->GetBaseClient(client)->setClientStatus(OFFLINE);
 	NoticeClientLeft(client);
-	_network->CloseConnection(client->getSocket());/*
-	delete (client);*/
+	_network->CloseConnection(client->getSocket());
+	delete (client);
 	it = _dataRuntime.erase(std::find(_dataRuntime.begin(), _dataRuntime.end(), client));
 }
 
@@ -219,11 +219,7 @@ void Server::GetCList(ClientRuntime* client)
 		for (std::deque<ClientBase*>::iterator it = _dataBase.begin(); it != _dataBase.end(); ++it)
 		{
 			if (_dataHandler->GetBaseClient(client)->getId() != (*it)->getId())
-			{
-				std::cout << _dataHandler->GetBaseClient(client)->getId() << " n'est pas égal a " << (*it)->getId() << std::endl;
-				std::cout << "client id " << _dataHandler->GetBaseClient(client)->getId() << " est different de base id " << (*it)->getId() << std::endl;
-				GetCInfo((*it), client->getSocket());
-			}
+			  GetCInfo((*it), client->getSocket());
 		}
 		memset(_sPacket, 0, sizeof(*_sPacket));
 		_sPacket->response = END_CTLIST;
@@ -233,7 +229,6 @@ void Server::GetCList(ClientRuntime* client)
 
 void Server::RequestCall(ClientRuntime* client)
 {
-	std::cout << "inside requestcall" << std::endl;
 	if (!client->isLoggedIn())
 	{
 		_sPacket->response = FORBIDDEN;
@@ -246,12 +241,10 @@ void Server::RequestCall(ClientRuntime* client)
 		strncpy(_sPacket->data.IncomingCall.nickname, _dataHandler->GetBaseClient(client)->getNickname().c_str(), _dataHandler->GetBaseClient(client)->getNickname().size());
 		_network->sendMessage(_sPacket, sizeof(*_sPacket), _dataHandler->GetSocketById(_dataRuntime, _cPacket->data.rq_call.id));
 	}
-	std::cout << "leaving requestcall" << std::endl;
 }
 
 void Server::AcceptCall(ClientRuntime* client)
 {
-	std::cout << "inside accept" << std::endl;
 	std::cout << "id : " << _cPacket->data.acpt_call.id << "   ip : " << _cPacket->data.acpt_call.ip << "   port : " << _cPacket->data.acpt_call.port << std::endl;
 	if (!client->isLoggedIn())
 	{

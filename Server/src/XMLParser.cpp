@@ -1,3 +1,5 @@
+#ifdef _WIN32
+
 #include <iostream>
 #ifdef _WIN32
 #include <Windows.h>
@@ -178,3 +180,5 @@ void XMLParser::WriteContactList(std::list<int>& cList, std::ofstream& file)
 		file << "		<ID=" << (*it) << "/>" << std::endl;
 	file << "	</CONTACTLIST>" << std::endl;
 }
+
+#endif

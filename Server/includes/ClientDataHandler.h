@@ -5,7 +5,6 @@
 # include <deque>
 # include "ClientBase.h"
 # include "ClientRuntime.h"
-# include "XMLParser.h"
 
 class ClientDataHandler
 {
@@ -15,9 +14,8 @@ public:
 
 private:
 	std::string					_filename;
-	int							_id;
-	std::deque<ClientBase*>&	_base;
-	XMLParser*					_bddHandler;
+	int						_id;
+	std::deque<ClientBase*>&			_base;
 
 public:
 	void						LoginIsSet(std::string const& str, ClientRuntime* runtime);

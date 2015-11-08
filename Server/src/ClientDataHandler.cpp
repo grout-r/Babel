@@ -1,7 +1,7 @@
 #include "ClientDataHandler.h"
 
 ClientDataHandler::ClientDataHandler(std::string const& filename, int id, std::deque<ClientBase*>& base)
-	: _filename(filename), _id(id), _base(base), _bddHandler(new XMLParser(filename, base))
+	: _filename(filename), _id(id), _base(base)
 {/*
 	_id = _bddHandler->Parser();*/
 }
@@ -19,7 +19,7 @@ void ClientDataHandler::LoginIsSet(std::string const & str, ClientRuntime* runti
 		if ((*it)->getLogin() == str)
 		{
 			(*it)->setClientStatus(CONNECTED);
-			//break;
+			break;
 		}
 	}
 	runtime->setLogin(str);
@@ -59,7 +59,7 @@ ClientBase*					ClientDataHandler::GetBaseClient(ClientRuntime* runtime)
 
 void ClientDataHandler::RefreshBase()
 {
-	_bddHandler->Generator(_id);
+	// _bddHandler->Generator(_id);
 }
 
 MySocket ClientDataHandler::GetSocketById(std::deque<ClientRuntime*>& runtime, int id)
