@@ -9,7 +9,7 @@ InterClientCom::~InterClientCom()
 {
 }
 
-bool			InterClientCom::Connect(std::string& ip, std::string& port)
+bool			InterClientCom::Connect(std::string ip, std::string port)
 {
 	MyConnectionData*	conData;
 
@@ -24,7 +24,7 @@ bool			InterClientCom::Connect(std::string& ip, std::string& port)
 	return true;
 }
 
-bool InterClientCom::Accept(std::string & port)
+bool InterClientCom::Accept(std::string port)
 {
 	MyConnectionData*	conData;
 

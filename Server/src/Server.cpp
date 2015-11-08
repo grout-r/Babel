@@ -1,6 +1,10 @@
 #include "Server.h"
 #include <algorithm>
 #include <string>
+#ifdef _WIN32
+#include <Windows.h>
+#include <intrin.h>
+#endif
 #include <string.h>
 
 Server::Server(std::string const & ip, std::string const & port)

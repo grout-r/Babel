@@ -1,7 +1,7 @@
 #ifndef _ICODEC_H_
 # define _ICODEC_H_
 
-# include "sound.hpp"
+# include "Sound.hpp"
 
 class ICodec
 {

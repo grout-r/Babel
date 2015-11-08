@@ -4,6 +4,12 @@
 # include "NetworkAPI.h"
 # include "ClientPacket.h"
 # include "ServerPacket.h"
+# include <string.h>
+
+# ifdef __linux__
+#define INVALID_SOCKET -1
+#endif
+
 
 /*
 virtual bool						initNetwork() = 0;
@@ -30,7 +36,6 @@ public:
 	bool		nickname(std::string);
 	bool		getContactList();
 	bool		requestCall(int);
-	bool		sendTestMessage(std::string);
 	bool		checkResponse();
 	bool		sendResponseToCall(bool, std::string, std::string, int);
 	ServerPacket*		checkMessage();

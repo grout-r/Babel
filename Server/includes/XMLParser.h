@@ -9,7 +9,6 @@
 
 # define EOL std::string::npos
 
-
 class XMLParser
 {
 

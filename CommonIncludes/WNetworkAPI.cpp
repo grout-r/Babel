@@ -1,3 +1,5 @@
+#ifdef _WIN32
+
 #include "WNetworkAPI.h"
 
 WNetworkAPI::WNetworkAPI()
@@ -122,7 +124,6 @@ void		WNetworkAPI::MySelectFunc(MySocket socket, fd_set& readSet, struct timeval
 	if (select(socket + 1, &readSet, NULL, NULL, to) == -1)
 	{
 		perror("select()");
-		system("pause");
 		exit(0);
 	}
 }
@@ -154,3 +155,5 @@ Network*						getNetworkInstance()
 {
 	return new WNetworkAPI;
 }
+
+#endif

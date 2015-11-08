@@ -36,8 +36,7 @@ void Core::start()
 	_uictrl = new UserInterfaceController;
 
 	QTimer *timer = new QTimer;
-	connect(timer, &QTimer::timeout,
-		[=]() { this->events(); });
+	connect(timer, &QTimer::timeout, [=]() { this->events(); });
 	timer->start(0);
 	
 	//_uictrl->insertNewContact("Bobby", 1217);
@@ -145,7 +144,6 @@ void Core::acceptedCall(ServerPacket *pack)
 	_isCommunicate = true;
 	_packetSend = new Sound::Encoded;
 	_packetReceived = new Sound::Encoded;
-	_audio;
 	_audio.startRecord();
 	_audio.startPlay();
 }

@@ -39,7 +39,7 @@ bool ServerLink::login(std::string login)
 	memset(packet, 0, sizeof(*packet));
 	packet->command = AUTH;
 	memset(packet->data.Auth.username, 0, sizeof(packet->data.Auth.username));
-	strncpy_s(packet->data.Auth.username, login.c_str(), login.size());
+	strncpy(packet->data.Auth.username, login.c_str(), login.size());
 	if (_net->sendMessage(packet, sizeof(*packet), _serverSocket) == false)
 		return false;
 	checkResponse();
@@ -53,7 +53,7 @@ bool ServerLink::nickname(std::string login)
 	memset(packet, 0, sizeof(*packet));
 	packet->command = NICKNAME;
 	memset(packet->data.Nick.nick, 0, sizeof(packet->data.Nick.nick));
-	strncpy_s(packet->data.Nick.nick, login.c_str(), login.size());
+	strncpy(packet->data.Nick.nick, login.c_str(), login.size());
 	if (_net->sendMessage(packet, sizeof(*packet), _serverSocket) == false)
 		return false;
 	checkResponse();
@@ -80,12 +80,6 @@ bool ServerLink::requestCall(int id)
 	packet->data.rq_call.id = id;
 	if (_net->sendMessage(packet, sizeof(*packet), _serverSocket) == false)
 		return false;
-	return true;
-}
-
-bool	ServerLink::sendTestMessage(std::string msg)
-{
-//	_net->sendMessage(msg.c_str(), _serverSocket);
 	return true;
 }
 
