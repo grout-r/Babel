@@ -1,7 +1,7 @@
 #ifndef NETWORK_H_
 # define NETWORK_H_
 
-# include "WindowsNetworkDefines.h"
+# include "NetworkDefines.h"
 
 class Network
 {

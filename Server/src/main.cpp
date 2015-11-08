@@ -1,5 +1,4 @@
 #include "Server.h"
-#include <Windows.h>
 #include <string>
 
 int main()
@@ -38,5 +37,4 @@ int main()
 		//}
 	}
 	*/
-	system("pause");
 }

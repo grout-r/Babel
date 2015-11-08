@@ -33,7 +33,7 @@ private:
 	std::deque<ClientRuntime*>				_dataRuntime;
 	ClientDataHandler*						_dataHandler;
 	int										_baseID;
-	std::map<ClientNetworkCommand, FPTR>	_funcMap;
+	std::vector<FPTR>					_funcMap;
 	std::vector<ClientNetworkCommand>		_keyVector;
 	std::string								_ip;
 	std::string								_port;
