@@ -32,13 +32,13 @@ bool				Server::InitNetwork()
 
 void				Server::InitFuncMap()
 {
-	_funcMap[AUTH] = &Server::Login;
-	_funcMap[NICKNAME] = &Server::Nick;
-	_funcMap[GETCLIST] = &Server::GetCList;
-	_funcMap[RQ_CALL] = &Server::RequestCall;
-	_funcMap[ACPT_CALL] = &Server::AcceptCall;
-	_funcMap[REFU_CALL] = &Server::RefuseCall;
-	_keyVector.push_back(AUTH);
+  _funcMap.emplace(AUTH, &Server::Login);
+  _funcMap.emplace(NICKNAME, &Server::Nick);
+  _funcMap.emplace(GETCLIST, &Server::GetCList);
+  _funcMap.emplace(RQ_CALL, &Server::RequestCall);
+  _funcMap.emplace(ACPT_CALL, &Server::AcceptCall);
+  _funcMap.emplace(REFU_CALL, &Server::RefuseCall);
+  _keyVector.push_back(AUTH);
 	_keyVector.push_back(NICKNAME);
 	_keyVector.push_back(GETCLIST);
 	_keyVector.push_back(RQ_CALL);
