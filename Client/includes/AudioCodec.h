@@ -5,7 +5,6 @@
 # include "opus.h"
 # include "Sound.hpp"
 
-
 class AudioCodec : public ICodec
 {
 public:

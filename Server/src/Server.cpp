@@ -1,8 +1,10 @@
 #include "Server.h"
-#include <Windows.h>
-#include <Algorithm>
+#include <algorithm>
 #include <string>
+#ifdef _WIN32
+#include <Windows.h>
 #include <intrin.h>
+#endif
 
 Server::Server(std::string const & ip, std::string const & port)
 	: _network(getNetworkInstance()), _cPacket(new ClientPacket()), _sPacket(new ServerPacket()), _dataHandler(new ClientDataHandler(std::string("ClientData.xml"), 0, _dataBase)), _ip(ip), _port(port)
@@ -198,7 +200,7 @@ void Server::GetCInfo(ClientBase* client, MySocket socket)
 	memset(_sPacket, 0, sizeof(*_sPacket));
 	_sPacket->response = USER_INFO;
 	_sPacket->data.UserInfo.id = client->getId();
-	strncpy_s(_sPacket->data.UserInfo.nickname, client->getNickname().c_str(), client->getNickname().size());
+	strncpy(_sPacket->data.UserInfo.nickname, client->getNickname().c_str(), client->getNickname().size());
 	_sPacket->data.UserInfo.status = client->getClientStatus();
 	_network->sendMessage(_sPacket, sizeof(*_sPacket), socket);
 }
@@ -241,7 +243,7 @@ void Server::RequestCall(ClientRuntime* client)
 	{
 		_sPacket->response = INCOM_CALL;
 		_sPacket->data.IncomingCall.id = _dataHandler->GetBaseClient(client)->getId();
-		strncpy_s(_sPacket->data.IncomingCall.nickname, _dataHandler->GetBaseClient(client)->getNickname().c_str(), _dataHandler->GetBaseClient(client)->getNickname().size());
+		strncpy(_sPacket->data.IncomingCall.nickname, _dataHandler->GetBaseClient(client)->getNickname().c_str(), _dataHandler->GetBaseClient(client)->getNickname().size());
 		_network->sendMessage(_sPacket, sizeof(*_sPacket), _dataHandler->GetSocketById(_dataRuntime, _cPacket->data.rq_call.id));
 	}
 	std::cout << "leaving requestcall" << std::endl;
@@ -260,8 +262,8 @@ void Server::AcceptCall(ClientRuntime* client)
 	{
 		_sPacket->response = CALL_RQ_ACPT;
 		_sPacket->data.CallRqAccept.id = _cPacket->data.acpt_call.id;
-		strncpy_s(_sPacket->data.CallRqAccept.ip, _cPacket->data.acpt_call.ip, strlen(_cPacket->data.acpt_call.ip));
-		strncpy_s(_sPacket->data.CallRqAccept.port, (char*)_cPacket->data.acpt_call.port, 4);
+		strncpy(_sPacket->data.CallRqAccept.ip, _cPacket->data.acpt_call.ip, strlen(_cPacket->data.acpt_call.ip));
+		strncpy(_sPacket->data.CallRqAccept.port, (char*)_cPacket->data.acpt_call.port, 4);
 		_network->sendMessage(_sPacket, sizeof(*_sPacket), _dataHandler->GetSocketById(_dataRuntime, _cPacket->data.acpt_call.id));
 	}
 }

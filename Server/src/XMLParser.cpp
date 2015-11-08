@@ -1,5 +1,7 @@
 #include <iostream>
+#ifdef _WIN32
 #include <Windows.h>
+#endif
 #include "XMLParser.h"
 
 XMLParser::XMLParser(std::string const & filename, std::deque<ClientBase*>& queue)

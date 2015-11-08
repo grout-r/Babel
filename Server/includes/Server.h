@@ -4,6 +4,7 @@
 # include <string>
 # include <deque>
 # include <map>
+# include <cstring>
 # include <vector>
 # include <sys/types.h>
 # include "NetworkAPI.h"
@@ -13,6 +14,11 @@
 # include "ClientRuntime.h"
 # include "ClientPacket.h"
 # include "ServerPacket.h"
+
+#ifdef __linux__
+#define INVALID_SOCKET -1
+#endif
+
 
 class Server;
 

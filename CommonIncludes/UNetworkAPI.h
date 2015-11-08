@@ -3,6 +3,7 @@
 
 # ifdef __linux__
 
+
 # include "NetworkAPI.h"
 
 class							UNetworkAPI : public Network
@@ -13,18 +14,20 @@ public:
 	~UNetworkAPI();
 
 	bool						initNetwork();
-	MyConnectionData*			getAddr(char * ip, char * port, int family, int socktype, int protocol, int flags);
+	MyConnectionData*			getAddr(const char * ip, const char * port, int family, int socktype, int protocol, int flags);
 	MySocket					MySocketFunc(MyConnectionData*);
 	bool						MyConnectFunc(MySocket, MyConnectionData*);
 	bool						MyBindFunc(MySocket, MyConnectionData*);
 	bool						MyListenFunc(MySocket);
 	MySocket					MyAcceptFunc(MySocket);
-	bool						sendMessage(const char *msg, MySocket);
-	void						MySelectFunc(MySocket socket, fd_set& readSet);
-	void						FdSetFunc(MySocket socket, MySocket sSocket, fd_set &readSet);
+	bool						sendMessage(const void *, int,  MySocket);
+	void						MySelectFunc(MySocket socket, fd_set& readSet, struct timeval *to);
+	void						ZeroFD(fd_set& fdSet);
+	void						SetFD(MySocket socket, fd_set &fdSet);
+
 	bool						CheckFdIsSet(MySocket sSocket, fd_set &readSet);
-	std::string					rcvMessage(MySocket);
-	bool						closeConnection();
+	int					rcvMessage(MySocket socket, void* buffer, int size);
+	bool						CloseConnection(MySocket socket);
 };
 
 # endif

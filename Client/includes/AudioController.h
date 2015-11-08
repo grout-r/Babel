@@ -14,7 +14,7 @@ public:
 
 private:
 	AudioController(const AudioController &) {};
-	const AudioController &operator=(const AudioController &) {};
+	const AudioController &operator=(const AudioController &) {return *this;};
 
 public:
 	Sound::Encoded	SoundEvent();

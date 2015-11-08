@@ -4,7 +4,6 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <string.h>
-
 # include "UNetworkAPI.h"
 
 UNetworkAPI::UNetworkAPI()
@@ -54,7 +53,7 @@ bool UNetworkAPI::MyConnectFunc(MySocket socket, MyConnectionData *addrInfo)
 	{
 		close(socket);
 		socket = -1;
-		return fasle;
+		return false;
 	}
 	return true;
 }
@@ -93,10 +92,9 @@ MySocket UNetworkAPI::MyAcceptFunc(MySocket ListenSocket)
 }
 
 
-
-bool UNetworkAPI::sendMessage(const char * msg, MySocket socket)
+bool UNetworkAPI::sendMessage( const void * buffer, int size, MySocket socket)
 {
-	int iResult = send(socket, msg, (int)strlen(msg), 0);
+	int iResult = send(socket, buffer, size, 0);
 	if (iResult == -1) {
 		printf("send failed\n");
 		close(socket);
@@ -110,9 +108,9 @@ int UNetworkAPI::rcvMessage(MySocket socket, void* buffer, int size)
 	return recv(socket, (char*)buffer, size, 0);
 }
 
-void		UNetworkAPI::MySelectFunc(MySocket socket, fd_set &readSet)
+void		UNetworkAPI::MySelectFunc(MySocket socket, fd_set& readSet, struct timeval *to)
 {
-	if (select(socket + 1, &readSet, NULL, NULL, NULL) == -1)
+	if (select(socket + 1, &readSet, NULL, NULL, to) == -1)
 	{
 		perror("select()");
 		exit(0);
@@ -136,10 +134,10 @@ bool		UNetworkAPI::CheckFdIsSet(MySocket readSocket, fd_set &readSet)
 	return false;
 }
 
-bool UNetworkAPI::closeConnection(MySocket socket)
+bool		UNetworkAPI::CloseConnection(MySocket socket)
 {
-	close(socket)
-	return false;
+  close(socket);
+	return true;
 }
 
 Network*						getNetworkInstance()

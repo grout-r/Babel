@@ -11,7 +11,7 @@ set(CMAKE_AUTOMOC ON)
 find_package(Qt5Widgets)
 find_package(Qt5Core)
 
-file(GLOB SOURCES src/*.cpp)
+file(GLOB SOURCES src/*.cpp includes/*.cpp)
 
 include_directories(Client/includes)
 include_directories(CommonIncludes)
@@ -23,3 +23,7 @@ add_executable(BabelClient WIN32 ${SOURCES} ${moc_sources})
 
 # Use the Widgets module from Qt 5.
 target_link_libraries(BabelClient Qt5::Widgets)
+
+set_target_properties(BabelClient PROPERTIES LINKER_LANGUAGE CXX)
+
+ADD_DEFINITIONS(-std=c++11)

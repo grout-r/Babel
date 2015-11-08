@@ -1,11 +1,11 @@
 #ifndef UICTRL
 # define UICTRL
 
-# include <QApplication>
+# include <QtWidgets/QApplication>
 # include <QObject>
 # include <QTimer>
-# include <QPushButton>
-# include <QMessageBox>
+# include <QtWidgets/QPushButton>
+# include <QtWidgets/QMessageBox>
 # include <iostream>
 # include <queue>
 # include "GUI.h"

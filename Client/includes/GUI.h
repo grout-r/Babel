@@ -1,17 +1,16 @@
 #ifndef GUI_H_
 # define GUI_H_
 
-# include <QWidget>
-# include <QApplication.h>
-# include <QLineEdit>
-# include <QGridLayout>
-# include <QPushButton>
-# include <QLabel>
+# include <QtWidgets/QApplication>
+# include <QtWidgets/QLineEdit>
+# include <QtWidgets/QGridLayout>
+# include <QtWidgets/QPushButton>
+# include <QtWidgets/QLabel>
 # include <QObject>
 # include <string>
-# include <QScrollArea>
+# include <QtWidgets/QScrollArea>
 # include <QString>
-# include <QVBoxLayout>
+# include <QtWidgets/QVBoxLayout>
 
 class GUI : public QWidget
 {

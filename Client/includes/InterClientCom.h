@@ -4,6 +4,11 @@
 # include "NetworkAPI.h"
 # include "AudioController.h"
 
+
+#ifdef __linux__
+# define INVALID_SOCKET -1 
+#endif
+
 class InterClientCom
 {
 public:
@@ -16,8 +21,8 @@ private:
 	MySocket			_peerSocket;
 
 public:
-	bool				Connect(std::string& ip, std::string& port);
-	bool				Accept(std::string& port);
+	bool				Connect(std::string  ip, std::string  port);
+	bool				Accept(std::string port);
 	bool				TryAccept();
 	bool				SendData(Sound::Encoded *);
 	bool				ReceiveData(Sound::Encoded*) const;
